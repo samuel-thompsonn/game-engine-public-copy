@@ -1,0 +1,402 @@
+<Game>
+    <Name>Flappy Bird</Name>
+    <Thumbnail>flappy_bird_icon.png</Thumbnail>
+    <Description>Play the classic game that got millions of people hooked</Description>
+    <Entities>
+        <!--Bird Entity -->
+        <ImageEntity>
+            <Name>Bird</Name>
+            <Width>50</Width>
+            <Height>50</Height>
+            <Image>flappy_down.png</Image>
+            <VariableNames>GoingDown GoingUp</VariableNames>
+            <VariableValues>flappy_bird/flappy_down.png flappy_bird/flappy_up.png</VariableValues>
+            <Behaviors>
+                <!--Jump up once up key is pressed -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                        <IndependentAction>
+                            <Effect>Jump 0 -0.8 + 10.0</Effect>
+                            <Effect>SetImage GoingUp</Effect>
+<!--                            <Effect>CreateEntityRelative PipeUp 100 100</Effect>-->
+                        </IndependentAction>
+                    </InputCondition>
+                </Behavior>
+                <!--If up key not pressed, set image facing down-->
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>SetImage GoingDown</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Bird Follows Gravity-->
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>Gravity 0. 0.07 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Dies if you collide with upward facing pipe-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeUp</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Dies if you collide with downward facing pipe-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeDown</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeUp-Small</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Dies if you collide with downward facing pipe-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeDown-Small</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeUp-Large</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Dies if you collide with downward facing pipe-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeDown-Large</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeUp-XL</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Dies if you collide with downward facing pipe-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>PipeDown-XL</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Dies if you collide with terrain-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                        <Effect>SetImage flappy_bird/flappydie.png</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--Reset Game once dead-->
+                <Behavior>
+                    <GameVariableCondition>
+                        <VariableName>Lives</VariableName>
+                        <RequiredValue>0.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>GoToLevel 1</Effect>
+                        <Effect>SetVariable Lives 1.0</Effect>
+                        <Effect>SetVariable Score 0.0</Effect>
+                        <Effect>SetVariable CameraShiftValue 0.0</Effect>
+                        <Effect>SetVariable CameraBorderXPos 300.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Moves bird forward-->
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>VelocityInput .100 0 + .0400</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Shift Camera toward the right-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>XPos</VariableName>
+                        <Comparison>GreaterThan</Comparison>
+                        <RequiredValue>CameraBorderXPos</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable CameraShiftValue XPos</Effect>
+                        <Effect>ChangeVariable CameraShiftValue - CameraBorderXPos</Effect>
+                        <Effect>ChangeVariable CameraShiftValue * -1</Effect>
+                        <Effect>ShiftCamera CameraShiftValue 0</Effect>
+                        <Effect>ChangeVariable CameraBorderXPos - CameraShiftValue</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!--Floor Entity -->
+        <ImageEntity>
+            <Name>Floor</Name>
+            <Width>1000</Width>
+            <Height>50</Height>
+            <Image>floor.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <!--BackGround Entity -->
+        <ImageEntity>
+            <Name>Background</Name>
+            <Width>1000</Width>
+            <Height>800</Height>
+            <Image>flappy_background.png</Image>
+        </ImageEntity>
+        <!--Upward Facing Pipe Entity -->
+        <ImageEntity>
+            <Name>PipeUp</Name>
+            <Width>50</Width>
+            <Height>400</Height>
+            <Image>pipe_up.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>PipeUp-Small</Name>
+            <Width>50</Width>
+            <Height>500</Height>
+            <Image>pipe_up.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>PipeUp-Large</Name>
+            <Width>50</Width>
+            <Height>250</Height>
+            <Image>pipe_up.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>PipeUp-XL</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image>pipe_up.png</Image>
+        </ImageEntity>
+        <!--Downward Facing Pipe Entity -->
+        <ImageEntity>
+            <Name>PipeDown</Name>
+            <Width>50</Width>
+            <Height>150</Height>
+            <Image>pipe_down.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>PipeDown-Small</Name>
+            <Width>50</Width>
+            <Height>50</Height>
+            <Image>pipe_down.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>PipeDown-Large</Name>
+            <Width>50</Width>
+            <Height>300</Height>
+            <Image>pipe_down.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>PipeDown-XL</Name>
+            <Width>50</Width>
+            <Height>450</Height>
+            <Image>pipe_down.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>ScreenMover</Name>
+            <Width>50</Width>
+            <Height>1000</Height>
+            <Image>transparent.png</Image>
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>Bird</Entity1>
+                    <Entity2>ScreenMover</Entity2>
+                    <Direction>Left</Direction>
+                </RequiredCollisionCondition>
+                <IndependentAction>
+                    <Effect>ChangePosition 200 0 + </Effect>
+                    <Effect>ChangeVariable Score + 1.0</Effect>
+                </IndependentAction>
+            </Behavior>
+        </ImageEntity>
+    </Entities>
+    <Variables>
+        <!--Score Variable-->
+        <Variable>
+            <Name>Score</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <!--Lives Variable-->
+        <Variable>
+            <Name>Lives</Name>
+            <StartValue>1</StartValue>
+        </Variable>
+        <!--Camera shift value-->
+        <Variable>
+            <Name>CameraShiftValue</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <!--Camera border X pos value-->
+        <Variable>
+            <Name>CameraBorderXPos</Name>
+            <StartValue>300</StartValue>
+        </Variable>
+    </Variables>
+    <Levels>
+        <Level>
+            <ID>1</ID>
+            <NextLevel>1</NextLevel>
+            <EndCondition>DestroyAll Bird</EndCondition>
+            <ImageEntityInstances>
+                <ImageEntityInstance>
+                    <Name>ScreenMover</Name>
+                    <XPos>500</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                    <Columns>10</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>700</YPos>
+                    <Columns>10</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Bird</Name>
+                    <XPos>100</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>100 500</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeUp</Name>
+                    <XPos>500</XPos>
+                    <YPos>300</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeDown</Name>
+                    <XPos>500</XPos>
+                    <YPos>0</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeUp-Small</Name>
+                    <XPos>700</XPos>
+                    <YPos>200</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeDown-Small</Name>
+                    <XPos>700</XPos>
+                    <YPos>0</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeUp-Large</Name>
+                    <XPos>900</XPos>
+                    <YPos>450</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeDown-Large</Name>
+                    <XPos>900</XPos>
+                    <YPos>0</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeUp-XL</Name>
+                    <XPos>1100</XPos>
+                    <YPos>600</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeDown-XL</Name>
+                    <XPos>1100</XPos>
+                    <YPos>0</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeUp-Large</Name>
+                    <XPos>1300</XPos>
+                    <YPos>450</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PipeDown-Large</Name>
+                    <XPos>1300</XPos>
+                    <YPos>0</YPos>
+                    <Columns>10</Columns>
+                    <XGap>1000</XGap>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Score: %.0f</Text>
+                    <Font>Times New Roman</Font>
+                    <XPos>850</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <Stationary>true</Stationary>
+                    <PropertyVariableDependency>
+                        <VariableName>Score</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+        </Level>
+    </Levels>
+</Game>

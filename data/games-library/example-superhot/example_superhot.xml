@@ -1,0 +1,766 @@
+<!--Author: Samuel Thompson-->
+<Game>
+  <Name>HOT</Name>
+  <Thumbnail>superhot_logo.jpg</Thumbnail>
+  <Description>SUPER. HOT.</Description>
+  <Entities>
+<!--    Character Entity-->
+    <ImageEntity>
+      <Name>Player</Name>
+      <Width>70</Width>
+      <Height>70</Height>
+      <Image>mario_standing_right.png</Image>
+      <VariableNames>RandomSeed</VariableNames>
+      <VariableValues>1.0</VariableValues>
+      <Behaviors>
+        <!--  Exist to obey gravity.-->
+        <Behavior>
+          <IndependentAction>
+<!--            <Effect>Gravity 0 CurrentGravity + 10.0</Effect>-->
+          </IndependentAction>
+        </Behavior>
+        <!--        Press right to go right (causes game to run at normal speed)-->
+        <Behavior>
+          <InputCondition>
+            <Key>RightKey2</Key>
+            <InputRequirement>Active</InputRequirement>
+            <InputRequirement>Pressed</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>VelocityInput .2000 0 + .3200</Effect>
+            <Effect>SetVariable SlowDown false</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Press left to go left-->
+        <Behavior>
+          <InputCondition>
+            <Key>LeftKey2</Key>
+            <InputRequirement>Active</InputRequirement>
+            <InputRequirement>Pressed</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>VelocityInput -.2000 0 + .3200</Effect>
+            <Effect>SetVariable SlowDown false</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Press Up to go Up-->
+        <Behavior>
+          <InputCondition>
+            <Key>UpKey2</Key>
+            <InputRequirement>Active</InputRequirement>
+            <InputRequirement>Pressed</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>VelocityInput 0 -.2000 + .3200</Effect>
+            <Effect>SetVariable SlowDown false</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--        Press Down to go down-->
+        <Behavior>
+          <InputCondition>
+            <Key>DownKey2</Key>
+            <InputRequirement>Active</InputRequirement>
+            <InputRequirement>Pressed</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>VelocityInput 0 .2000 + .3200</Effect>
+            <Effect>SetVariable SlowDown false</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        React to changes in game speed by changing gravity and score increase rate -->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>false</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariable CurrentGravity GravityFast</Effect>
+            <Effect>ChangeVariable Score + 10</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>true</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariable CurrentGravity GravitySlow</Effect>
+            <Effect>ChangeVariable Score + .1</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Press no keys to run at slow speed. -->
+        <Behavior>
+          <InputCondition>
+            <Key>RightKey2</Key>
+            <InputRequirement>Inactive</InputRequirement>
+          </InputCondition>
+          <InputCondition>
+            <Key>DownKey2</Key>
+            <InputRequirement>Inactive</InputRequirement>
+          </InputCondition>
+          <InputCondition>
+            <Key>LeftKey2</Key>
+            <InputRequirement>Inactive</InputRequirement>
+          </InputCondition>
+          <InputCondition>
+            <Key>UpKey2</Key>
+            <InputRequirement>Inactive</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>SetVariable SlowDown true</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Run into enemies to die.-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity1>SELF</Entity1>
+            <Entity2>Projectile</Entity2>
+            <Direction>ANY</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>CreateEntityRelative PlayerFragment -20 0</Effect>
+            <Effect>CreateEntityRelative PlayerFragment 0 0</Effect>
+            <Effect>CreateEntityRelative PlayerFragment 20 0</Effect>
+            <Effect>CreateEntityRelative PlayerFragment 0 -20</Effect>
+            <Effect>CreateEntityRelative PlayerFragment 0 20</Effect>
+            <Effect>CreateEntityRelative PlayerFragment -20 20</Effect>
+            <Effect>CreateEntityRelative PlayerFragment -20 -20</Effect>
+            <Effect>CreateEntityRelative PlayerFragment 20 20</Effect>
+            <Effect>CreateEntityRelative PlayerFragment 20 -20</Effect>
+            <Effect>SetVariable SlowDown false</Effect>
+            <Effect>RemoveSelf</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--  Run into a brick downward to stop falling.-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity1>SELF</Entity1>
+            <Entity2>universalTerrain</Entity2>
+            <Direction>Down</Direction>
+          </RequiredCollisionCondition>
+          <CollisionDeterminedAction>
+            <Args>universalTerrain Down</Args>
+            <Effect>TerrainCollisionDown</Effect>
+            <Effect>SetVariable Jumping False</Effect>
+          </CollisionDeterminedAction>
+        </Behavior>
+        <!--  Run into a brick Left to stop too-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>universalTerrain</Entity2>
+            <Direction>Left</Direction>
+          </RequiredCollisionCondition>
+          <CollisionDeterminedAction>
+            <Args>universalTerrain Left</Args>
+            <Effect>TerrainCollisionLeft</Effect>
+          </CollisionDeterminedAction>
+        </Behavior>
+        <!--  Run into a brick Right to stop too-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>universalTerrain</Entity2>
+            <Direction>Right</Direction>
+          </RequiredCollisionCondition>
+          <CollisionDeterminedAction>
+            <Args>universalTerrain Right</Args>
+            <Effect>TerrainCollisionRight</Effect>
+          </CollisionDeterminedAction>
+        </Behavior>
+        <!--  Run into a brick downward to stop too-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>universalTerrain</Entity2>
+            <Direction>Up</Direction>
+          </RequiredCollisionCondition>
+          <CollisionDeterminedAction>
+            <Args>universalTerrain Up</Args>
+            <Effect>TerrainCollisionUp</Effect>
+          </CollisionDeterminedAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Floor Entity-->
+    <ImageEntity>
+      <Name>Floor</Name>
+      <Width>100</Width>
+      <Height>100</Height>
+      <Image>basic_terrain.png</Image>
+      <VariableNames>TerrainID</VariableNames>
+      <VariableValues>universalTerrain</VariableValues>
+    </ImageEntity>
+<!--    Background-->
+    <ImageEntity>
+      <Name>Background</Name>
+      <Width>1200</Width>
+      <Height>1200</Height>
+      <Image>background.png</Image>
+      <Stationary>true</Stationary>
+      <Behaviors>
+<!--        Use the black background when things are fast.-->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>false</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetImage example-superhot/background.png</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Use the grey background when things are slowed.-->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>true</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetImage example-superhot/second_background.png</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Button Entity (left)-->
+    <ImageEntity>
+      <Name>ButtonLeft</Name>
+      <Width>100</Width>
+      <Height>100</Height>
+      <Image>button_left.png</Image>
+      <VariableNames>TerrainID</VariableNames>
+      <VariableValues>universalTerrain</VariableValues>
+    </ImageEntity>
+<!--    Button Entity (down)-->
+    <ImageEntity>
+      <Name>ButtonDown</Name>
+      <Width>100</Width>
+      <Height>100</Height>
+      <Image>button_down.png</Image>
+      <VariableNames>TerrainID Depleted</VariableNames>
+      <VariableValues>universalTerrain false</VariableValues>
+      <Behaviors>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity1>SELF</Entity1>
+            <Entity2>Player</Entity2>
+            <Direction>Down</Direction>
+          </RequiredCollisionCondition>
+          <EntityVariableCondition>
+            <VariableName>Depleted</VariableName>
+            <RequiredValue>false</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>CreateEntityRelative Scroller 0.0 -100.0</Effect>
+            <Effect>SetVariable Depleted true</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Door-->
+    <ImageEntity>
+      <Name>Door</Name>
+      <Width>100</Width>
+      <Height>200</Height>
+      <Image>lock.png</Image>
+      <VariableNames>TerrainID openImage</VariableNames>
+      <VariableValues>universalTerrain example-superhot/lock_open.png</VariableValues>
+      <Behaviors>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity1>Player</Entity1>
+            <Entity2>ButtonLeft</Entity2>
+            <Direction>Right</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>SetImage openImage</Effect>
+            <Effect>SetVariable TerrainID nothing</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Projectile-->
+    <ImageEntity>
+      <Name>Projectile</Name>
+      <Width>50</Width>
+      <Height>30</Height>
+      <Image>enemy.png</Image>
+      <VariableNames>CurrentSpeed</VariableNames>
+      <VariableValues>-0.1</VariableValues>
+      <Behaviors>
+<!--        Go up at your speed.-->
+        <Behavior>
+          <IndependentAction>
+            <Effect>ChangeVelocity 0.0 CurrentSpeed + 10.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--        Go fast when needed.-->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>false</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariable CurrentSpeed -0.1</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--        Go slow when needed.-->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>true</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariable CurrentSpeed -0.01</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Destroy self when offscreen.-->
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>YPos</VariableName>
+            <Comparison>LessThan</Comparison>
+            <RequiredValue>-100.0</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>RemoveSelf</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Destroy self when clicked on.-->
+        <Behavior>
+          <InputCondition>
+            <Key>ClickedOn</Key>
+            <InputRequirement>Pressed</InputRequirement>
+            <InputRequirement>Active</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>CreateEntityRelative ProjectileFragment -20 0</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 0 0</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 20 0</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 0 -20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 0 20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment -20 20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment -20 -20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 20 20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 20 -20</Effect>
+            <Effect>RemoveSelf</Effect>
+          </IndependentAction>
+        </Behavior>
+<!--        Destroy self when running into a shield-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity1>SELF</Entity1>
+            <Entity2>shield</Entity2>
+            <Direction>Up</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>CreateEntityRelative ProjectileFragment -20 0</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 0 0</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 20 0</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 0 -20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 0 20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment -20 20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment -20 -20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 20 20</Effect>
+            <Effect>CreateEntityRelative ProjectileFragment 20 -20</Effect>
+            <Effect>RemoveSelf</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Random Projectile Generator-->
+    <ImageEntity>
+      <Name>ProjectileMaker</Name>
+      <Width>0</Width>
+      <Height>0</Height>
+      <Image>enemy.png</Image>
+      <VariableNames>RandomSeed SpawnX SeedThreshold</VariableNames>
+      <VariableValues>1.0 0.0 0.1</VariableValues>
+      <Behaviors>
+        <!--      Spawn enemies at a rate proportional to the game speed-->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>true</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariable SeedThreshold 0.03</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>SlowDown</VariableName>
+            <RequiredValue>false</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariable SeedThreshold 0.3</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--        Randomly generate a seed number every frame.-->
+        <Behavior>
+          <IndependentAction>
+            <Effect>SetVariableRandomly RandomSeed 0.0 1.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--        Randomly spawn hostile enemies below. -->
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>RandomSeed</VariableName>
+            <Comparison>LessThan</Comparison>
+            <RequiredValue>SeedThreshold</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariableRandomly SpawnX 0.0 1000.0</Effect>
+            <Effect>CreateEntityRelative Projectile SpawnX 0.0</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Fragment when the player dies-->
+    <ImageEntity>
+      <Name>PlayerFragment</Name>
+      <Width>20</Width>
+      <Height>20</Height>
+      <Image>mario_standing_right.png</Image>
+      <VariableNames>xVel yVel</VariableNames>
+      <VariableValues>0 0</VariableValues>
+      <Behaviors>
+        <!-- Set Random Velocity-->
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>xVel</VariableName>
+            <RequiredValue>0.0</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariableRandomly xVel 0.0 0.65</Effect>
+            <Effect>SetVariableRandomly yVel 0.0 -2.20 </Effect>
+            <Effect>SetVelocity xVel yVel</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!-- Follows Gravity-->
+        <Behavior>
+          <IndependentAction>
+            <Effect>Gravity 0 0.1 + 10.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!-- Remove itself and restarts the level when offscreen (this is the death animation)-->
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>YPos</VariableName>
+            <Comparison>GreaterThan</Comparison>
+            <RequiredValue>1200</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>RemoveSelf</Effect>
+            <Effect>RestartLevel</Effect>
+            <Effect>SetVariable Score 0</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Fragment when a projectile dies.-->
+    <ImageEntity>
+      <Name>ProjectileFragment</Name>
+      <Width>15</Width>
+      <Height>15</Height>
+      <Image>enemy.png</Image>
+      <VariableNames>xVel yVel</VariableNames>
+      <VariableValues>0 0</VariableValues>
+      <Behaviors>
+        <!-- Set Random Velocity-->
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>xVel</VariableName>
+            <RequiredValue>0.0</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>SetVariableRandomly xVel 0.0 0.65</Effect>
+            <Effect>SetVariableRandomly yVel 0.0 -1.0 </Effect>
+            <Effect>SetVelocity xVel yVel</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!-- Follows Gravity-->
+        <Behavior>
+          <IndependentAction>
+            <Effect>Gravity 0 0.1 + 10.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!-- Remove itself when offscreen-->
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>YPos</VariableName>
+            <Comparison>GreaterThan</Comparison>
+            <RequiredValue>1200</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>RemoveSelf</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Goalpost that ends the level-->
+    <ImageEntity>
+      <Name>Goalpost</Name>
+      <Width>100</Width>
+      <Height>100</Height>
+      <Image>lock.png</Image>
+      <Behaviors>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity1>SELF</Entity1>
+            <Entity2>Player</Entity2>
+            <Direction>ANY</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>GoToNextLevel</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Blocker entity-->
+    <ImageEntity>
+      <Name>Blocker</Name>
+      <Width>400</Width>
+      <Height>100</Height>
+      <Image>blocker.png</Image>
+      <VariableNames>TerrainID</VariableNames>
+      <VariableValues>shield</VariableValues>
+      <Behaviors>
+<!--        Moves right and left with the arrow keys-->
+        <Behavior>
+          <InputCondition>
+            <Key>LeftKey</Key>
+            <InputRequirement>Active</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>ChangeVelocity -0.1300 0.0 + 12</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <InputCondition>
+            <Key>RightKey</Key>
+            <InputRequirement>Active</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>ChangeVelocity 0.1300 0.0 + 12</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+<!--    Camera scroller-->
+    <ImageEntity>
+      <Name>Scroller</Name>
+      <Width>208</Width>
+      <Height>308</Height>
+      <Image>rcd.jpg</Image>
+      <VariableNames>XTarget XShifted</VariableNames>
+      <VariableValues>1999 0</VariableValues>
+      <Behaviors>
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>XShifted</VariableName>
+            <Comparison>LessThan</Comparison>
+            <RequiredValue>XTarget</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>ShiftCamera -10 0</Effect>
+            <Effect>ChangeVariable XShifted + 10.0</Effect>
+            <Effect>ChangeVelocity 0.1 0 + 0.5</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>XPos</VariableName>
+            <Comparison>GreaterThan</Comparison>
+            <RequiredValue>XTarget</RequiredValue>
+          </EntityVariableCondition>
+          <IndependentAction>
+            <Effect>SetPosition XTarget YPos</Effect>
+            <Effect>SetVelocity 0.0 0.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <EntityVariableCondition>
+            <VariableName>XShifted</VariableName>
+            <Comparison>GreaterThan</Comparison>
+            <RequiredValue>XTarget</RequiredValue>
+          </EntityVariableCondition>
+          <InputCondition>
+            <Key>UpKey</Key>
+            <InputRequirement>Active</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>Resize 400 600</Effect>
+            <Effect>GotoLevel 1 3000</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+  </Entities>
+  <Variables>
+    <Variable>
+      <Name>SlowDown</Name>
+      <StartValue>false</StartValue>
+    </Variable>
+    <Variable>
+      <Name>GravityFast</Name>
+      <StartValue>0.1</StartValue>
+    </Variable>
+    <Variable>
+      <Name>GravitySlow</Name>
+      <StartValue>0.01</StartValue>
+    </Variable>
+    <Variable>
+      <Name>CurrentGravity</Name>
+      <StartValue>0.1</StartValue>
+    </Variable>
+    <Variable>
+      <Name>Score</Name>
+      <StartValue>0</StartValue>
+    </Variable>
+  </Variables>
+  <Levels>
+    <Level>
+      <ID>1</ID>
+      <NextLevel>3</NextLevel>
+      <ImageEntityInstances>
+        <ImageEntityInstance>
+          <Name>Background</Name>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Player</Name>
+          <XPos>200</XPos>
+          <YPos>200</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Blocker</Name>
+          <XPos>200</XPos>
+          <YPos>600</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>ProjectileMaker</Name>
+          <XPos>0</XPos>
+          <YPos>900.0</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+          <Rows>12</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>900</XPos>
+          <YPos>0</YPos>
+          <Rows>4</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Door</Name>
+          <XPos>900</XPos>
+          <YPos>400</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Goalpost</Name>
+          <XPos>1000</XPos>
+          <YPos>400</YPos>
+          <Rows>2</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>900</XPos>
+          <YPos>600</YPos>
+          <Rows>6</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+          <Columns>12</Columns>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>ButtonLeft</Name>
+          <XPos>400</XPos>
+          <YPos>400</YPos>
+        </ImageEntityInstance>
+      </ImageEntityInstances>
+      <TextEntityInstances>
+        <TextEntityInstance>
+          <Text>Score: %.0f</Text>
+          <Font>Comic Sans MS</Font>
+          <XPos>850</XPos>
+          <YPos>0</YPos>
+          <Width>150</Width>
+          <Height>50</Height>
+          <Stationary>true</Stationary>
+          <PropertyVariableDependency>
+            <VariableName>Score</VariableName>
+            <PropertyName>Text</PropertyName>
+          </PropertyVariableDependency>
+        </TextEntityInstance>
+      </TextEntityInstances>
+    </Level>
+    <Level>
+      <ID>3</ID>
+      <NextLevel>3</NextLevel>
+      <ImageEntityInstances>
+        <ImageEntityInstance>
+          <Name>Background</Name>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Player</Name>
+          <XPos>200</XPos>
+          <YPos>200</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+          <Rows>12</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>900</XPos>
+          <YPos>0</YPos>
+          <Rows>4</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Door</Name>
+          <XPos>900</XPos>
+          <YPos>400</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Goalpost</Name>
+          <XPos>1000</XPos>
+          <YPos>400</YPos>
+          <Rows>2</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>900</XPos>
+          <YPos>600</YPos>
+          <Rows>6</Rows>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>0</XPos>
+          <YPos>0</YPos>
+          <Columns>12</Columns>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>ButtonDown</Name>
+          <XPos>400</XPos>
+          <YPos>400</YPos>
+        </ImageEntityInstance>
+      </ImageEntityInstances>
+      <TextEntityInstances>
+        <TextEntityInstance>
+          <Text>You Win! Hold the UP ARROW to restart.</Text>
+          <Font>Comic Sans MS</Font>
+          <XPos>2300</XPos>
+          <YPos>0</YPos>
+          <Width>600</Width>
+          <Height>500</Height>
+        </TextEntityInstance>
+      </TextEntityInstances>
+    </Level>
+  </Levels>
+</Game>

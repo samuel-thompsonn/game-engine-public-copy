@@ -1,0 +1,709 @@
+<Game>
+    <Name>Sonic the Hedgehog</Name>
+    <Thumbnail>sonic_preview.jpg</Thumbnail>
+    <Description>A classic platformer featuring your favorite (and only) hedgehog faster than the speed of sound.</Description>
+    <Entities>
+        <ImageEntity>
+            <Name>Sonic</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image>sonic.gif</Image>
+            <VariableNames>Still FacingRight FacingLeft Blinking Spinning MaxSpeed MaxJump</VariableNames>
+            <VariableValues>sonic/sonic.gif sonic/sonic_facing_right.gif sonic/sonic_facing_left.gif false sonic/sonic_spinning.gif .6 -1.2</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>SetImage Still</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>SetImage FacingLeft</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput -.1300 0 + MaxSpeed</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput .1300 0 + MaxSpeed</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>SetImage FacingRight</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Sonic</Entity1>
+                        <Entity2>Spikes</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>SetVariable Blinking true</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>enemy</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>SetVariable Blinking true</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>enemy</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>SetVariable Blinking true</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>enemy</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>SetVariable Blinking true</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>enemy</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0.0 -1.50 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--        Run out of lives to start the game over.-->
+                <Behavior>
+                    <GameVariableCondition>
+                        <VariableName>Lives</VariableName>
+                        <RequiredValue>0.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>GoToLevel 1</Effect>
+                        <Effect>SetVariable Lives 3.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>true</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>BlinkImage Still none Still 50 1300</Effect>
+                        <Effect>SetVariable Blinking false 1300</Effect>
+                        <Effect>SetVelocity 0.0 0.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Sonic</Entity1>
+                        <Entity2>Floor</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>Floor Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Sonic</Entity1>
+                        <Entity2>Floor</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>Floor Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Sonic</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Sonic</Entity1>
+                        <Entity2>Floor</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>Floor Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Sonic</Entity1>
+                        <Entity2>InvisibleWall</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>InvisibleWall Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>Gravity 0 0.1 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0 MaxJump + 10.0</Effect>
+                        <Effect>SetImage Spinning</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>XPos</VariableName>
+                        <Comparison>GreaterThan</Comparison>
+                        <RequiredValue>CameraBorderRightPos</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable CameraShiftValue XPos</Effect>
+                        <Effect>ChangeVariable CameraShiftValue - CameraBorderRightPos</Effect>
+                        <Effect>ChangeVariable CameraShiftValue * -1</Effect>
+                        <Effect>ShiftCamera CameraShiftValue 0</Effect>
+                        <Effect>ChangeVariable CameraBorderRightPos - CameraShiftValue</Effect>
+                        <Effect>ChangeVariable CameraBorderLeftPos - CameraShiftValue</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>XPos</VariableName>
+                        <Comparison>LessThan</Comparison>
+                        <RequiredValue>CameraBorderLeftPos</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable CameraShiftValue XPos</Effect>
+                        <Effect>ChangeVariable CameraShiftValue - CameraBorderLeftPos</Effect>
+                        <Effect>ChangeVariable CameraShiftValue * -1</Effect>
+                        <Effect>ShiftCamera CameraShiftValue 0</Effect>
+                        <Effect>ChangeVariable CameraBorderRightPos - CameraShiftValue</Effect>
+                        <Effect>ChangeVariable CameraBorderLeftPos - CameraShiftValue</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>powerUp</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable MaxJump -1.8</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>MaxJump</VariableName>
+                        <RequiredValue>-1.8</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable MaxJump -1.2 8000</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Floor</Name>
+            <Width>100</Width>
+            <Height>50</Height>
+            <Image>terrain_block.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Spikes</Name>
+            <Width>100</Width>
+            <Height>50</Height>
+            <Image>spikes.png</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Coin</Name>
+            <Width>40</Width>
+            <Height>40</Height>
+            <Image>coin.gif</Image>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Sonic</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>RemoveSelf</Effect>
+                        <Effect>ChangeVariable Coins + 1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Robot</Name>
+            <Width>75</Width>
+            <Height>107</Height>
+            <Image>robot.png</Image>
+            <VariableNames>EnemyID TerrainID xVel</VariableNames>
+            <VariableValues>enemy enemy 0.1300</VariableValues>
+            <!--        Moves forward every frame-->
+            <Behavior>
+                <IndependentAction>
+                    <Effect>VelocityInput xVel 0.0 + 0.2000</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!--      Also follows gravity, like Sonic-->
+            <Behavior>
+                <IndependentAction>
+                    <Effect>Gravity 0 0.1 + 10.0</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!--      Also runs into terrain like Sonic-->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>Down</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>universalTerrain Down</Args>
+                    <Effect>TerrainCollisionDown</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+            <!--        Run into a brick sideways or downward to stop too-->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>Left</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>universalTerrain Left</Args>
+                    <Effect>TerrainCollisionLeft</Effect>
+                    <Effect>SetVariable xVel 0.1300</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>Right</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>universalTerrain Right</Args>
+                    <Effect>TerrainCollisionRight</Effect>
+                    <Effect>SetVariable xVel -0.1300</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>Up</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>universalTerrain Up</Args>
+                    <Effect>TerrainCollisionUp</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+            <!--      Run into Sonic's feet to die.-->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>Sonic</Entity2>
+                    <Direction>Up</Direction>
+                </RequiredCollisionCondition>
+                <IndependentAction>
+                    <Effect>RemoveSelf</Effect>
+                </IndependentAction>
+            </Behavior>
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>enemyBlocker</Entity2>
+                    <Direction>Left</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>enemyBlocker Left</Args>
+                    <Effect>TerrainCollisionLeft</Effect>
+                    <Effect>SetVariable xVel 0.1300</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>enemyBlocker</Entity2>
+                    <Direction>Right</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>enemyBlocker Right</Args>
+                    <Effect>TerrainCollisionRight</Effect>
+                    <Effect>SetVariable xVel -0.1300</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Background</Name>
+            <Width>1000</Width>
+            <Height>800</Height>
+            <Image>background.jpg</Image>
+            <Stationary>true</Stationary>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>InvisibleWall</Name>
+            <Width>60</Width>
+            <Height>800</Height>
+            <Image> </Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Platform</Name>
+            <Width>100</Width>
+            <Height>50</Height>
+            <Image>terrain_block.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>powerUp</Name>
+            <Width>50</Width>
+            <Height>60</Height>
+            <Image>powerUp.png</Image>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Sonic</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>RemoveSelf</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>enemyBlocker</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image> </Image>
+            <VariableNames>TerrainId</VariableNames>
+            <VariableValues>enemyBlocker</VariableValues>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>levelEnder</Name>
+            <Width>100</Width>
+            <Height>200</Height>
+            <Image>level_end.png</Image>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Sonic</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>GoToNextLevel</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+    </Entities>
+    <Variables>
+        <Variable>
+            <Name>Lives</Name>
+            <StartValue>3</StartValue>
+        </Variable>
+        <Variable>
+            <Name>Coins</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <Variable>
+            <Name>CameraShiftValue</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <Variable>
+            <Name>CameraBorderRightPos</Name>
+            <StartValue>500</StartValue>
+        </Variable>
+        <Variable>
+            <Name>CameraBorderLeftPos</Name>
+            <StartValue>75</StartValue>
+        </Variable>
+    </Variables>
+    <Levels>
+        <Level>
+            <ID>1</ID>
+            <NextLevel>2</NextLevel>
+            <ImageEntityInstances>
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Robot</Name>
+                    <XPos>600</XPos>
+                    <YPos>318</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Sonic</Name>
+                    <XPos>150</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>150 500</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Coin</Name>
+                    <XPos>600</XPos>
+                    <YPos>300</YPos>
+                    <Columns>4</Columns>
+                    <XGap>20</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Coin</Name>
+                    <XPos>600</XPos>
+                    <YPos>500</YPos>
+                    <Columns>4</Columns>
+                    <XGap>20</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Spikes</Name>
+                    <XPos>400</XPos>
+                    <YPos>600</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>InvisibleWall</Name>
+                    <XPos>30</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>700</XPos>
+                    <YPos>600</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>300</XPos>
+                    <YPos>250</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>500</XPos>
+                    <YPos>600</YPos>
+                    <Columns>2</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>800</XPos>
+                    <YPos>600</YPos>
+                    <Columns>60</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Robot</Name>
+                    <XPos>6000</XPos>
+                    <YPos>493</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>enemyBlocker</Name>
+                    <XPos>5600</XPos>
+                    <YPos>500</YPos>
+                    <Columns>2</Columns>
+                    <XGap>900</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Coin</Name>
+                    <XPos>4000</XPos>
+                    <YPos>550</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Coin</Name>
+                    <XPos>1300</XPos>
+                    <YPos>375</YPos>
+                    <Columns>5</Columns>
+                    <Rows>2</Rows>
+                    <XGap>60</XGap>
+                    <YGap>150</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Platform</Name>
+                    <XPos>275</XPos>
+                    <YPos>425</YPos>
+                    <Columns>6</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>enemyBlocker</Name>
+                    <XPos>225</XPos>
+                    <YPos>375</YPos>
+                    <Columns>2</Columns>
+                    <XGap>650</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Platform</Name>
+                    <XPos>2075</XPos>
+                    <YPos>425</YPos>
+                    <Columns>6</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Spikes</Name>
+                    <XPos>2075</XPos>
+                    <YPos>550</YPos>
+                    <Columns>6</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>powerUp</Name>
+                    <XPos>4200</XPos>
+                    <YPos>420</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>levelEnder</Name>
+                    <XPos>6400</XPos>
+                    <YPos>400</YPos>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Lives: %.0f</Text>
+                    <Font>SansSerif</Font>
+                    <XPos>850</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <Stationary>true</Stationary>
+                    <PropertyVariableDependency>
+                        <VariableName>Lives</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+                <TextEntityInstance>
+                    <Text>Rings: %.0f</Text>
+                    <Font>Syntax UltraBlack</Font>
+                    <XPos>650</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <Stationary>true</Stationary>
+                    <PropertyVariableDependency>
+                        <VariableName>Coins</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+        </Level>
+        <Level>
+            <ID>2</ID>
+            <NextLevel>1</NextLevel>
+<!--            <ImageEntityInstances>-->
+<!--                <ImageEntityInstance>-->
+<!--                    <Name>Floor</Name>-->
+<!--                    <XPos>200</XPos>-->
+<!--                    <YPos>500</YPos>-->
+<!--                </ImageEntityInstance>-->
+<!--            </ImageEntityInstances>-->
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>YOU WIN!</Text>
+                    <Font>Syntax UltraBlack</Font>
+                    <XPos>250</XPos>
+                    <YPos>300</YPos>
+                    <Width>450</Width>
+                    <Height>150</Height>
+                </TextEntityInstance>
+            </TextEntityInstances>
+        </Level>
+    </Levels>
+</Game>

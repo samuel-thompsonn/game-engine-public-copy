@@ -1,0 +1,297 @@
+<Game>
+  <Name>Chrome Dino</Name>
+  <Thumbnail>dino_logo.jpg</Thumbnail>
+  <Description>Back from the jurassic period to entertain you while your wifi is down.</Description>
+  <Entities>
+    <!-- Settings for the floor    -->
+    <ImageEntity>
+      <Name>Floor</Name>
+      <Width>1000</Width>
+      <Height>20</Height>
+      <Image>floor.png</Image>
+      <VariableNames>TerrainID</VariableNames>
+      <VariableValues>universalTerrain</VariableValues>
+    </ImageEntity>
+    <!-- Settings for the Dino -->
+    <ImageEntity>
+      <Name>DinoUser</Name>
+      <Width>100</Width>
+      <Height>100</Height>
+      <Image>dinosaur.png</Image>
+      <VariableNames>Normal Crouched</VariableNames>
+      <VariableValues>example-dino/dinosaur.png example-dino/crouched-dino.png</VariableValues>
+      <Behaviors>
+        <Behavior>
+          <InputCondition>
+            <Key>DownKey</Key>
+            <InputRequirement>false</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>SetImage Normal</Effect>
+            <Effect>Resize 100 100</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <InputCondition>
+            <Key>DownKey</Key>
+            <InputRequirement>Pressed</InputRequirement>
+            <InputRequirement>Active</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>SetImage Crouched</Effect>
+            <Effect>Resize 100 75</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <InputCondition>
+            <Key>DownKey</Key>
+            <InputRequirement>Pressed</InputRequirement>
+          </InputCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Score + 100.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--Gravity Behavior-->
+        <Behavior>
+          <IndependentAction>
+            <Effect>Gravity 0 0.1 + 10.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--Collision with floor  -->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>universalTerrain</Entity2>
+            <Direction>Down</Direction>
+          </RequiredCollisionCondition>
+          <CollisionDeterminedAction>
+            <Args>universalTerrain Down</Args>
+            <Effect>TerrainCollisionDown</Effect>
+          </CollisionDeterminedAction>
+        </Behavior>
+        <!--        Press Up while on the ground to jump.-->
+        <Behavior>
+          <InputCondition>
+            <Key>UpKey</Key>
+            <InputRequirement>Pressed</InputRequirement>
+          </InputCondition>
+          <RequiredCollisionCondition>
+            <Entity2>universalTerrain</Entity2>
+            <Direction>Down</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>Jump 0.0 -1.2 + 10.0</Effect>
+            <Effect>ChangeVariable Score + 100.0</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--   Collision with enemies-->
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>Cactus</Entity2>
+            <Direction>Right</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>Cactus</Entity2>
+            <Direction>Left</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>Cactus</Entity2>
+            <Direction>Up</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>SmallCactus</Entity2>
+            <Direction>Right</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>SmallCactus</Entity2>
+            <Direction>Left</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>SmallCactus</Entity2>
+            <Direction>Up</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>Bird</Entity2>
+            <Direction>Right</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>Bird</Entity2>
+            <Direction>Left</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <Behavior>
+          <RequiredCollisionCondition>
+            <Entity2>Bird</Entity2>
+            <Direction>Up</Direction>
+          </RequiredCollisionCondition>
+          <IndependentAction>
+            <Effect>ChangeVariable Lives + -1.0</Effect>
+            <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+          </IndependentAction>
+        </Behavior>
+        <!--        Run out of lives to start the game over.-->
+        <Behavior>
+          <GameVariableCondition>
+            <VariableName>Lives</VariableName>
+            <RequiredValue>0.0</RequiredValue>
+          </GameVariableCondition>
+          <IndependentAction>
+            <Effect>GoToLevel 1</Effect>
+            <Effect>SetVariable Lives 1.0</Effect>
+            <Effect>SetVariable Score 0.0</Effect>
+          </IndependentAction>
+        </Behavior>
+      </Behaviors>
+    </ImageEntity>
+    <!--Cactus behavior -->
+    <ImageEntity>
+      <Name>Cactus</Name>
+      <Width>49</Width>
+      <Height>96</Height>
+      <Image>cactus.png</Image>
+      <Behavior>
+        <IndependentAction>
+          <Effect>VelocityInput -.100 0 + .3200</Effect>
+        </IndependentAction>
+      </Behavior>
+    </ImageEntity>
+    <!--Small Cactus behavior -->
+    <ImageEntity>
+      <Name>SmallCactus</Name>
+      <Width>49</Width>
+      <Height>56</Height>
+      <Image>smallcactus.png</Image>
+      <Behavior>
+        <IndependentAction>
+          <Effect>VelocityInput -.100 0 + .3200</Effect>
+        </IndependentAction>
+      </Behavior>
+    </ImageEntity>
+    <!--Bird behavior -->
+    <ImageEntity>
+      <Name>Bird</Name>
+      <Width>54</Width>
+      <Height>49</Height>
+      <Image>bird.png</Image>
+      <Behavior>
+        <IndependentAction>
+          <Effect>VelocityInput -.100 0 + .3200</Effect>
+        </IndependentAction>
+      </Behavior>
+    </ImageEntity>
+  </Entities>
+  <Variables>
+    <!--Lives Variable -->
+    <Variable>
+      <Name>Lives</Name>
+      <StartValue>1</StartValue>
+    </Variable>
+    <!--Score Variable -->
+    <Variable>
+      <Name>Score</Name>
+      <StartValue>0</StartValue>
+    </Variable>
+  </Variables>
+  <Levels>
+    <Level>
+      <ID>1</ID>
+      <NextLevel>1</NextLevel>
+      <EndCondition>DestroyALl Koopa</EndCondition>
+      <ImageEntityInstances>
+        <ImageEntityInstance>
+          <Name>Floor</Name>
+          <XPos>0</XPos>
+          <YPos>400</YPos>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>DinoUser</Name>
+          <XPos>100</XPos>
+          <Xgap>100</Xgap>
+          <YPos>200</YPos>
+          <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+          <VariableValues>100 200</VariableValues>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Cactus</Name>
+          <XPos>500</XPos>
+          <YPos>304</YPos>
+          <Columns>40</Columns>
+          <XGap>1000</XGap>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>SmallCactus</Name>
+          <XPos>950</XPos>
+          <YPos>344</YPos>
+          <Columns>40</Columns>
+          <XGap>1000</XGap>
+        </ImageEntityInstance>
+        <ImageEntityInstance>
+          <Name>Bird</Name>
+          <XPos>1300</XPos>
+          <YPos>275</YPos>
+          <Columns>40</Columns>
+          <XGap>1000</XGap>
+        </ImageEntityInstance>
+      </ImageEntityInstances>
+      <TextEntityInstances>
+        <TextEntityInstance>
+          <Text>Score: %.0f</Text>
+          <Font>Times New Roman</Font>
+          <XPos>850</XPos>
+          <YPos>0</YPos>
+          <Width>150</Width>
+          <Height>50</Height>
+          <PropertyVariableDependency>
+            <VariableName>Score</VariableName>
+            <PropertyName>Text</PropertyName>
+          </PropertyVariableDependency>
+        </TextEntityInstance>
+      </TextEntityInstances>
+    </Level>
+  </Levels>
+</Game>

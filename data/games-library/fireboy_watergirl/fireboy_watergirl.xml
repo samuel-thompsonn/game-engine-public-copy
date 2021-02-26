@@ -1,0 +1,953 @@
+<Game>
+    <Name>Fireboy and Watergirl</Name>
+    <Thumbnail>fireboy_watergirl_preview.jpg</Thumbnail>
+    <Description>A cooperative two-player game featuring elemental royalty.</Description>
+    <Entities>
+        <ImageEntity>
+            <Name>Fireboy</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image>fireboy.png</Image>
+            <VariableNames>ID Still FacingRight FacingLeft Blinking</VariableNames>
+            <VariableValues>player fireboy_watergirl/fireboy.png fireboy_watergirl/fireboy_facing_right.png fireboy_watergirl/fireboy_facing_left.png false</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>Floor</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>RedDoor</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <RequiredCollisionCondition>
+                        <Entity1>Watergirl</Entity1>
+                        <Entity2>BlueDoor</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <RequiredCollisionCondition>
+                        <Entity1>Watergirl</Entity1>
+                        <Entity2>Floor</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <InputCondition>
+                        <Key>DownKey2</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <InputCondition>
+                        <Key>DownKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <GameVariableCondition>
+                        <VariableName>RedDiamonds</VariableName>
+                        <RequiredValue>1.0</RequiredValue>
+                    </GameVariableCondition>
+                    <GameVariableCondition>
+                        <VariableName>BlueDiamonds</VariableName>
+                        <RequiredValue>1.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>GoToNextLevel</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>SetImage Still</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput -.1300 0 + .2600</Effect>
+                        <Effect>SetImage FacingLeft</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput .1300 0 + .2600</Effect>
+                        <Effect>SetImage FacingRight</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>WaterTerrain</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>SetVariable Blinking true</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>true</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>BlinkImage Still none Still 50 1300</Effect>
+                        <Effect>SetVariable Blinking false 1300</Effect>
+                        <Effect>SetVelocity 0.0 0.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>LavaTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>LavaTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>LavaTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>LavaTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>LavaTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>LavaTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>LavaTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>LavaTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Fireboy</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>Gravity 0 0.1 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0 -1.2 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Watergirl</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image>watergirl.png</Image>
+            <VariableNames>ID Still FacingRight FacingLeft Blinking</VariableNames>
+            <VariableValues>player fireboy_watergirl/watergirl.png fireboy_watergirl/watergirl_facing_right.png fireboy_watergirl/watergirl_facing_left.png false</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey2</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <InputCondition>
+                        <Key>RightKey2</Key>
+                        <InputRequirement>false</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>SetImage Still</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey2</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput -.1300 0 + .2600</Effect>
+                        <Effect>SetImage FacingLeft</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey2</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput .1300 0 + .2600</Effect>
+                        <Effect>SetImage FacingRight</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>LavaTerrain</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnXLocation RespawnYLocation</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                        <Effect>SetVariable Blinking true</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Blinking</VariableName>
+                        <RequiredValue>true</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>BlinkImage Still none Still 50 1300</Effect>
+                        <Effect>SetVariable Blinking false 1300</Effect>
+                        <Effect>SetVelocity 0.0 0.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>WaterTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>WaterTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>WaterTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>WaterTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>WaterTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>WaterTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>WaterTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>WaterTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>Gravity 0 0.1 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey2</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0 -1.2 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Floor</Name>
+            <Width>100</Width>
+            <Height>50</Height>
+            <Image>floorBrick.jpg</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>LavaTerrain</Name>
+            <Width>25</Width>
+            <Height>20</Height>
+            <Image>lavaTerrain.jpg</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>WaterTerrain</Name>
+            <Width>25</Width>
+            <Height>20</Height>
+            <Image>waterTerrain.jpg</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>RedDiamond</Name>
+            <Width>40</Width>
+            <Height>40</Height>
+            <Image>redDiamond.jpg</Image>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Fireboy</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>RemoveSelf</Effect>
+                        <Effect>ChangeVariable Score + 1.0</Effect>
+                        <Effect>ChangeVariable RedDiamonds + 1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>BlueDiamond</Name>
+            <Width>40</Width>
+            <Height>40</Height>
+            <Image>blueDiamond.png</Image>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Watergirl</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>RemoveSelf</Effect>
+                        <Effect>ChangeVariable Score + 1.0</Effect>
+                        <Effect>ChangeVariable BlueDiamonds + 1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>RedDoor</Name>
+            <Width>75</Width>
+            <Height>107</Height>
+            <Image>redDoor.jpg</Image>
+            <VariableNames>OpenDoor DoorTimeDelay</VariableNames>
+            <VariableValues>fireboy_watergirl/openDoor.png 600</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Fireboy</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <RequiredCollisionCondition>
+                        <Entity1>Watergirl</Entity1>
+                        <Entity2>BlueDoor</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <GameVariableCondition>
+                        <VariableName>RedDiamonds</VariableName>
+                        <RequiredValue>1.0</RequiredValue>
+                    </GameVariableCondition>
+                    <GameVariableCondition>
+                        <VariableName>BlueDiamonds</VariableName>
+                        <RequiredValue>1.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage OpenDoor DoorTimeDelay</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>BlueDoor</Name>
+            <Width>75</Width>
+            <Height>107</Height>
+            <Image>blueDoor.jpg</Image>
+            <VariableNames>OpenDoor</VariableNames>
+            <VariableValues>fireboy_watergirl/openDoor.png</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>RedDoor</Entity1>
+                        <Entity2>Fireboy</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <RequiredCollisionCondition>
+                        <Entity1>Watergirl</Entity1>
+                        <Entity2>BlueDoor</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <GameVariableCondition>
+                        <VariableName>RedDiamonds</VariableName>
+                        <RequiredValue>1.0</RequiredValue>
+                    </GameVariableCondition>
+                    <GameVariableCondition>
+                        <VariableName>BlueDiamonds</VariableName>
+                        <RequiredValue>1.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage OpenDoor 600</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Background</Name>
+            <Width>1000</Width>
+            <Height>800</Height>
+            <Image>background.jpg</Image>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>Button</Name>
+            <Width>27</Width>
+            <Height>9</Height>
+            <Image>button.png</Image>
+            <VariableNames>TerrainID PressedBy</VariableNames>
+            <VariableValues>universalTerrain none</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Fireboy</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <EntityVariableCondition>
+                        <VariableName>PressedBy</VariableName>
+                        <RequiredValue>none</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetPosition PressedXPos PressedYPos 350</Effect>
+                        <Effect>SetVariable PressedBy fireboy 350</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Watergirl</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <EntityVariableCondition>
+                        <VariableName>PressedBy</VariableName>
+                        <RequiredValue>none</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetPosition PressedXPos PressedYPos 350</Effect>
+                        <Effect>SetVariable PressedBy watergirl 350</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <BannedCollisionCondition>
+                        <Entity2>Fireboy</Entity2>
+                        <Direction>Up</Direction>
+                    </BannedCollisionCondition>
+                    <EntityVariableCondition>
+                        <VariableName>PressedBy</VariableName>
+                        <RequiredValue>fireboy</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetPosition UnpressedXPos UnpressedYPos 250</Effect>
+                        <Effect>SetVariable PressedBy none 250</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <BannedCollisionCondition>
+                        <Entity2>Watergirl</Entity2>
+                        <Direction>Up</Direction>
+                    </BannedCollisionCondition>
+                    <EntityVariableCondition>
+                        <VariableName>PressedBy</VariableName>
+                        <RequiredValue>watergirl</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetPosition UnpressedXPos UnpressedYPos 250</Effect>
+                        <Effect>SetVariable PressedBy none 250</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <ImageEntity>
+            <Name>ActivatedDoor</Name>
+            <Width>40</Width>
+            <Height>100</Height>
+            <Image>activatedDoor.png</Image>
+            <VariableNames>TerrainID myImage</VariableNames>
+            <VariableValues>universalTerrain fireboy_watergirl/activatedDoor.png</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <EntityNameOrID>ID</EntityNameOrID>
+                        <VariableName>open</VariableName>
+                        <RequiredValue>true</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <EntityNameOrID>myButtonID</EntityNameOrID>
+                        <VariableName>PressedBy</VariableName>
+                        <RequiredValue>none</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage myImage</Effect>
+                        <Effect>Resize 40.0 50.0 0.0</Effect>
+                        <Effect>Resize 40.0 100.0 300</Effect>
+                        <Effect>SetVariable open false 300</Effect>
+                        <Effect>SetVariable TerrainID universalTerrain</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <EntityNameOrID>myButtonID</EntityNameOrID>
+                        <VariableName>PressedBy</VariableName>
+                        <RequiredValue>whichPlayerNeeded</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <EntityNameOrID>ID</EntityNameOrID>
+                        <VariableName>open</VariableName>
+                        <RequiredValue>false</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>Resize 40.0 50.0 0.0</Effect>
+                        <Effect>SetImage none 300</Effect>
+                        <Effect>Resize 0.0 0.0 300</Effect>
+                        <Effect>SetVariable open true 300</Effect>
+                        <Effect>SetVariable TerrainID none 300</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+    </Entities>
+    <Variables>
+        <Variable>
+            <Name>Lives</Name>
+            <StartValue>3</StartValue>
+        </Variable>
+        <Variable>
+            <Name>Score</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <Variable>
+            <Name>RedDiamonds</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <Variable>
+            <Name>BlueDiamonds</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+    </Variables>
+    <Levels>
+        <Level>
+            <ID>1</ID>
+            <NextLevel>2</NextLevel>
+            <ImageEntityInstances>
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedDoor</Name>
+                    <XPos>600</XPos>
+                    <YPos>318</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BlueDoor</Name>
+                    <XPos>800</XPos>
+                    <YPos>318</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Fireboy</Name>
+                    <XPos>130</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>130 500</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Watergirl</Name>
+                    <XPos>180</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>180 500</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BlueDiamond</Name>
+                    <XPos>500</XPos>
+                    <YPos>500</YPos>
+                    <Stationary>true</Stationary>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedDiamond</Name>
+                    <XPos>600</XPos>
+                    <YPos>500</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WaterTerrain</Name>
+                    <XPos>400</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>LavaTerrain</Name>
+                    <XPos>700</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>300</XPos>
+                    <YPos>250</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Button</Name>
+                    <XPos>350</XPos>
+                    <YPos>241</YPos>
+                    <VariableNames>ID PressedByFireboy PressedByWatergirl PressedXPos PressedYPos UnpressedXPos UnpressedYPos</VariableNames>
+                    <VariableValues>button0 false false 350 249 350 241</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>ActivatedDoor</Name>
+                    <XPos>350</XPos>
+                    <YPos>475</YPos>
+                    <VariableNames>ID myButtonID open whichPlayerNeeded</VariableNames>
+                    <VariableValues>door0 button0 false fireboy</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>500</XPos>
+                    <YPos>600</YPos>
+                    <Columns>2</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>800</XPos>
+                    <YPos>600</YPos>
+                    <Columns>2</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                    <Rows>12</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>950</XPos>
+                    <YPos>000</YPos>
+                    <Rows>12</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>275</XPos>
+                    <YPos>425</YPos>
+                    <Columns>6</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>ActivatedDoor</Name>
+                    <XPos>675</XPos>
+                    <YPos>475</YPos>
+                    <VariableNames>ID myButtonID open whichPlayerNeeded</VariableNames>
+                    <VariableValues>door1 button0 false watergirl</VariableValues>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Lives: %.0f</Text>
+                    <Font>Times New Roman</Font>
+                    <XPos>850</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <PropertyVariableDependency>
+                        <VariableName>Lives</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+                <TextEntityInstance>
+                    <Text>Score: %.0f</Text>
+                    <Font>Times New Roman</Font>
+                    <XPos>650</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <Stationary>true</Stationary>
+                    <PropertyVariableDependency>
+                        <VariableName>Score</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+        </Level>
+        <Level>
+            <ID>2</ID>
+            <NextLevel>1</NextLevel>
+            <ImageEntityInstances>
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedDoor</Name>
+                    <XPos>600</XPos>
+                    <YPos>318</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BlueDoor</Name>
+                    <XPos>800</XPos>
+                    <YPos>318</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Fireboy</Name>
+                    <XPos>130</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>130 500</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Watergirl</Name>
+                    <XPos>180</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>180 500</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BlueDiamond</Name>
+                    <XPos>500</XPos>
+                    <YPos>500</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedDiamond</Name>
+                    <XPos>600</XPos>
+                    <YPos>500</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WaterTerrain</Name>
+                    <XPos>400</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>LavaTerrain</Name>
+                    <XPos>700</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>300</XPos>
+                    <YPos>250</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Button</Name>
+                    <XPos>350</XPos>
+                    <YPos>241</YPos>
+                    <VariableNames>ID Pressed PressedXPos PressedYPos UnpressedXPos UnpressedYPos</VariableNames>
+                    <VariableValues>button0 false 350 249 350 241</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>ActivatedDoor</Name>
+                    <XPos>350</XPos>
+                    <YPos>475</YPos>
+                    <VariableNames>ID myButtonID open</VariableNames>
+                    <VariableValues>door0 button0 false</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>600</YPos>
+                    <Columns>4</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>500</XPos>
+                    <YPos>600</YPos>
+                    <Columns>2</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>800</XPos>
+                    <YPos>600</YPos>
+                    <Columns>2</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                    <Rows>12</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>950</XPos>
+                    <YPos>000</YPos>
+                    <Rows>12</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>275</XPos>
+                    <YPos>425</YPos>
+                    <Columns>6</Columns>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Lives: %.0f</Text>
+                    <Stationary>true</Stationary>
+                    <Font>Times New Roman</Font>
+                    <XPos>850</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <PropertyVariableDependency>
+                        <VariableName>Lives</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+                <TextEntityInstance>
+                    <Text>Score: %.0f</Text>
+                    <Stationary>true</Stationary>
+                    <Font>Times New Roman</Font>
+                    <XPos>650</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <PropertyVariableDependency>
+                        <VariableName>Score</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+        </Level>
+    </Levels>
+</Game>

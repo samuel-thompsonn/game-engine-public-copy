@@ -1,0 +1,994 @@
+<Game>
+    <Name>Downwell</Name>
+    <Thumbnail>Downwell_logo.png</Thumbnail>
+    <Description>Explore the abyss</Description>
+    <Entities>
+        <!-- Welltaro -->
+        <ImageEntity>
+            <Name>Welltaro</Name>
+            <Width>45</Width>
+            <Height>45</Height>
+            <Image>dw_main_character_idle_fall_right.png</Image>
+            <VariableNames>IdleFallSprite JumpingSprite WalkingSprite FiringSprite StandingSprite Facing Falling Jumping SidewaysMovement Firing PreviousY YVel PreviousX XVel</VariableNames>
+            <VariableValues>downwell/dw_main_character_idle_fall_right.png downwell/dw_main_character_jumping_right.png downwell/dw_main_character_walking_right.gif downwell/dw_main_character_firing_right.png downwell/dw_main_character_standing_right.gif Right True False False False 100 0 500 0</VariableValues>
+            <Behaviors>
+                <!-- Update WelltaroXPos, WelltaroYPos, XVel, YVel, PreviousX and PreviousY -->
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>SetVariable XVel XPos</Effect>
+                        <Effect>ChangeVariable XVel - PreviousX</Effect>
+                        <Effect>SetVariable YVel YPos</Effect>
+                        <Effect>ChangeVariable YVel - PreviousY</Effect>
+                        <Effect>SetVariable PreviousX XPos</Effect>
+                        <Effect>SetVariable PreviousY YPos</Effect>
+                        <Effect>SetVariable WelltaroXPos XPos</Effect>
+                        <Effect>SetVariable WelltaroYPos YPos</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- if YVel is positive, set falling to true and jumping to false -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>YVel</VariableName>
+                        <Comparison>GreaterThan</Comparison>
+                        <RequiredValue>0</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable Falling True</Effect>
+                        <Effect>SetVariable Jumping False</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- if YVel is negative, set falling to false and jumping to true-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>YVel</VariableName>
+                        <Comparison>LessThan</Comparison>
+                        <RequiredValue>0</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable Falling False</Effect>
+                        <Effect>SetVariable Jumping True</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- A Key Input -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey2</Key>
+                        <InputRequirement>Active</InputRequirement>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput -.1600 0 + .3200</Effect>
+                        <Effect>SetVariable Facing Left</Effect>
+                        <Effect>SetVariable Firing False</Effect>
+                        <Effect>SetVariable SidewaysMovement True</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- D Key Input -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey2</Key>
+                        <InputRequirement>Active</InputRequirement>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput .1600 0 + .3200</Effect>
+                        <Effect>SetVariable Facing Right</Effect>
+                        <Effect>SetVariable Firing False</Effect>
+                        <Effect>SetVariable SidewaysMovement True</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- neither D nor A keys input -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey2</Key>
+                        <InputRequirement>Inactive</InputRequirement>
+                    </InputCondition>
+                    <InputCondition>
+                        <Key>LeftKey2</Key>
+                        <InputRequirement>Inactive</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable SidewaysMovement False</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- W Key Input - fire while falling -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey2</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Falling</VariableName>
+                        <RequiredValue>True</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>CreateEntityRelative BootBullet 11 25</Effect>
+                        <Effect>CreateEntityRelative BootMuzzleFlash -3 25</Effect>
+                        <Effect>SetImage FiringSprite</Effect>
+                        <Effect>SetVelocity 0 -0.1</Effect>
+                        <Effect>SetVariable Firing True</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- W Key Input - fire while jumping (doesn't cancel velocity)-->
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey2</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Jumping</VariableName>
+                        <RequiredValue>True</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>CreateEntityRelative BootBullet 11 25</Effect>
+                        <Effect>CreateEntityRelative BootMuzzleFlash -3 25</Effect>
+                        <Effect>SetImage FiringSprite</Effect>
+                        <Effect>SetVariable Firing True</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- W Key Input - jump while standing-->
+                <Behavior>
+                    <InputCondition>
+                        <Key>UpKey2</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Falling</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Jumping</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0 -0.9 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Gravity Behavior-->
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>Gravity 0 0.07 + 20</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  Facing right means using the right facing sprites-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Facing</VariableName>
+                        <RequiredValue>Right</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable FiringSprite downwell/dw_main_character_firing_right.png</Effect>
+                        <Effect>SetVariable IdleFallSprite downwell/dw_main_character_idle_fall_right.png</Effect>
+                        <Effect>SetVariable JumpingSprite downwell/dw_main_character_jumping_right.png</Effect>
+                        <Effect>SetVariable WalkingSprite downwell/dw_main_character_walking_right.gif</Effect>
+                        <Effect>SetVariable StandingSprite downwell/dw_main_character_standing_right.gif</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  Facing left with means using the left facing sprites-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Facing</VariableName>
+                        <RequiredValue>Left</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable FiringSprite downwell/dw_main_character_firing_left.png</Effect>
+                        <Effect>SetVariable IdleFallSprite downwell/dw_main_character_idle_fall_left.png</Effect>
+                        <Effect>SetVariable JumpingSprite downwell/dw_main_character_jumping_left.png</Effect>
+                        <Effect>SetVariable StandingSprite downwell/dw_main_character_standing_left.gif</Effect>
+                        <Effect>SetVariable WalkingSprite downwell/dw_main_character_walking_left.gif</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  firing means using firing sprite-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Firing</VariableName>
+                        <RequiredValue>True</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage FiringSprite</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  falling and not firing means using falling sprite-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Firing</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Falling</VariableName>
+                        <RequiredValue>True</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage IdleFallSprite</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  jumping and not firing means using jumping sprite-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>Firing</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Jumping</VariableName>
+                        <RequiredValue>True</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage JumpingSprite</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  moving sideways and not falling or jumping means using walking sprites-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>SidewaysMovement</VariableName>
+                        <RequiredValue>True</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Falling</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Jumping</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage WalkingSprite</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  not moving sideways, falling, or jumping means using standing sprite and not firing-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>SidewaysMovement</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Falling</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <EntityVariableCondition>
+                        <VariableName>Jumping</VariableName>
+                        <RequiredValue>False</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage StandingSprite</Effect>
+                        <Effect>SetVariable Firing False</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  Run into a brick downward to stop falling.-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                        <Effect>SetVariable Jumping False</Effect>
+                        <Effect>SetVariable Falling False</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a brick Left to stop too-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a brick Right to stop too-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a brick up to stop too-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a monster downward to bounce off of it-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>monster</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable XVel * 0.001</Effect>
+                        <Effect>SetVelocity XVel -1.1</Effect>
+                        <Effect>ChangeVariable XVel * 1000</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Run into left side of screen and die-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>XPos</VariableName>
+                        <Comparison>LessThan</Comparison>
+                        <RequiredValue>0</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Run into right side of screen and die-->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>XPos</VariableName>
+                        <Comparison>GreaterThan</Comparison>
+                        <RequiredValue>955</RequiredValue> <!-- screen width (1000) minus width of Welltaro (45 at the moment) -->
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Run into finish line and restart the level-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>FinishLine</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives - 1</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Fall below the lower camera border to lower the camera (Based on Cary's sonic.xml)-->
+                <Behavior>
+                    <!-- If Welltaro is below the lower y border-->
+                    <EntityVariableCondition>
+                        <VariableName>YPos</VariableName>
+                        <Comparison>GreaterThan</Comparison>
+                        <RequiredValue>CameraBorderYBottom</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable CameraDiff YPos</Effect>                        <!-- Set CameraDiff to be Welltaro's current y pos ...-->
+                        <Effect>ChangeVariable CameraDiff - CameraBorderYBottom</Effect>     <!-- ... minus the lower border ... -->
+                        <Effect>ChangeVariable CameraDiff * -1</Effect>                     <!-- ... times -1-->
+                        <Effect>ShiftCamera 0 CameraDiff</Effect>                           <!-- move the camera 'CameraDiff' distance in the y direction-->
+                        <Effect>ChangeVariable CameraBorderYBottom - CameraDiff</Effect>     <!-- move the lower border right by the difference-->
+                        <Effect>ChangeVariable CameraBorderYTop - CameraDiff</Effect>      <!-- move the upper border right by the difference-->
+                    </IndependentAction>
+                </Behavior>
+                <!-- Resetting the Game and all the variables when lives reaches 0-->
+                <Behavior>
+                    <GameVariableCondition>
+                        <VariableName>Lives</VariableName>
+                        <RequiredValue>0.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>GoToLevel 1</Effect>
+                        <Effect>SetVariable Lives 1.0</Effect>
+                        <Effect>SetVariable Score 0.0</Effect>
+                        <Effect>SetVariable CameraBorderYBottom 300</Effect>
+                        <Effect>SetVariable CameraBorderYTop 100</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Boot muzzle flash -->
+        <ImageEntity>
+            <Name>BootMuzzleFlash</Name>
+            <Width>48</Width>
+            <Height>48</Height>
+            <Image>dw_boot_muzzle_flash.png</Image>
+            <!-- immediately destroy self-->
+            <Behavior>
+                <IndependentAction>
+                    <Effect>RemoveSelf</Effect>
+                </IndependentAction>
+            </Behavior>
+        </ImageEntity>
+        <!-- Boot projectiles -->
+        <ImageEntity>
+            <Name>BootBullet</Name>
+            <Width>24</Width>
+            <Height>54</Height>
+            <Image>dw_boot_bullet.png</Image>
+            <VariableNames>MyYOffset</VariableNames>
+            <VariableValues>0</VariableValues>
+            <!-- move downward and update screen position variable every frame -->
+            <Behavior>
+                <IndependentAction>
+                    <Effect>SetVelocity 0 1.5</Effect>
+                    <Effect>SetVariable MyYOffset YPos</Effect>
+                    <Effect>ChangeVariable MyYOffset - CameraBorderYBottom</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!-- get destroyed when out of view -->
+            <Behavior>
+                <EntityVariableCondition>
+                    <VariableName>MyYOffset</VariableName>
+                    <Comparison>GreaterThan</Comparison>
+                    <RequiredValue>500</RequiredValue>
+                </EntityVariableCondition>
+                <IndependentAction>
+                    <Effect>RemoveSelf</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!-- get destroyed on contact with terrain -->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>ANY</Direction>
+                </RequiredCollisionCondition>
+                <IndependentAction>
+                    <Effect>CreateEntityRelative BootMuzzleFlash -12 25</Effect>
+                    <Effect>RemoveSelf</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!-- get destroyed on contact with any monster -->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>SELF</Entity1>
+                    <Entity2>monster</Entity2>
+                    <Direction>ANY</Direction>
+                </RequiredCollisionCondition>
+                <IndependentAction>
+                    <Effect>CreateEntityRelative BootMuzzleFlash -12 25</Effect>
+                    <Effect>RemoveSelf</Effect>
+                </IndependentAction>
+            </Behavior>
+        </ImageEntity>
+        <!-- Red Trail -->
+        <ImageEntity>
+            <Name>RedTrail</Name>
+            <Width>45</Width>
+            <Height>45</Height>
+            <Image>dw_red_trail.png</Image>
+            <!-- when created, the frame position is given a number -->
+            <!-- the frame position corresponds to the current position in the cycle (resetting position every 5 frames) -->
+            <VariableNames>FramePosition</VariableNames>
+            <VariableValues>0</VariableValues>
+            <!-- add 1 to FramePosition -->
+            <Behavior>
+                <IndependentAction>
+                    <Effect>ChangeVariable FramePosition + 1</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!-- when the FramePosition reaches 5, reset it to 0 and move to where welltaro is -->
+            <Behavior>
+                <EntityVariableCondition>
+                    <VariableName>FramePosition</VariableName>
+                    <Comparison>GreaterThanEquals</Comparison>
+                    <RequiredValue>10</RequiredValue>
+                </EntityVariableCondition>
+                <IndependentAction>
+                    <Effect>SetVariable FramePosition 0</Effect>
+                    <Effect>SetPosition WelltaroXPos WelltaroYPos</Effect>
+                </IndependentAction>
+            </Behavior>
+        </ImageEntity>
+        <!-- Jelly Monster -->
+        <ImageEntity>
+            <Name>JellyMonster</Name>
+            <Width>60</Width>
+            <Height>45</Height>
+            <Image>dw_jelly_monster.gif</Image>
+            <VariableNames>MyHealth TerrainID XDiff YDiff XMoveDir YMoveDir Speed</VariableNames>
+            <VariableValues>100 monster 0 0 0 0 0.015</VariableValues>
+            <Behaviors>
+                <!-- move towards Welltaro behavior -->
+                <Behavior>
+                    <!-- determine the direction that welltaro is in -->
+                    <IndependentAction>
+                        <!-- calc. XMoveDir such that it's +1 if Welltaro is in the positive direction and -1 else-->
+                        <Effect>SetVariable XDiff WelltaroXPos</Effect>
+                        <Effect>ChangeVariable XDiff - XPos</Effect>
+                        <Effect>SetVariable XMoveDir XDiff</Effect>
+                        <Effect>ChangeVariable XMoveDir * XMoveDir</Effect>
+                        <Effect>ChangeVariable XMoveDir ^ 0.5</Effect>
+                        <Effect>ChangeVariable XMoveDir / XDiff</Effect>
+                        <!-- calc. YMoveDir such that it's +1 if Welltaro is in the positive direction and -1 else-->
+                        <Effect>SetVariable YDiff WelltaroYPos</Effect>
+                        <Effect>ChangeVariable YDiff - YPos</Effect>
+                        <Effect>SetVariable YMoveDir YDiff</Effect>
+                        <Effect>ChangeVariable YMoveDir * YMoveDir</Effect>
+                        <Effect>ChangeVariable YMoveDir ^ 0.5</Effect>
+                        <Effect>ChangeVariable YMoveDir / YDiff</Effect>
+                    </IndependentAction>
+                    <!-- move roughly in that direction -->
+                    <IndependentAction>
+                        <Effect>ChangeVariable XMoveDir * Speed</Effect>
+                        <Effect>ChangeVariable YMoveDir * Speed</Effect>
+                        <Effect>SetVelocity XMoveDir YMoveDir</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  Run into a brick downward to stop falling.-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a brick Left to stop too-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a brick Right to stop too-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!--  Run into a brick up to stop too-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <!-- if hit by bullet, reduce health and add to score -->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>BootBullet</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable MyHealth - 25</Effect>
+                        <Effect>ChangeVariable Score + 25</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- if hit by Welltaro from above, reduce health to zero and add to score-->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Welltaro</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Score + 150</Effect>
+                        <Effect>SetVariable MyHealth 0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- if health is zero, die and add to score -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>MyHealth</VariableName>
+                        <Comparison>LessThanEquals</Comparison>
+                        <RequiredValue>0</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>CreateEntityRelative MonsterExplosionEffect -45 -50</Effect>
+                        <Effect>ChangeVariable Score + 100</Effect>
+                        <Effect>RemoveSelf</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Finish Line -->
+        <ImageEntity>
+            <Name>FinishLine</Name>
+            <Height>3</Height>
+            <Width>450</Width>
+            <Image>dw_finish_line.png</Image>
+        </ImageEntity>
+        <!-- Monster Explosion effect -->
+        <ImageEntity>
+            <Name>MonsterExplosionEffect</Name>
+            <Height>174</Height>
+            <Width>174</Width>
+            <Image>dw_monster_explosion_1.png</Image>
+            <VariableNames>FrameNumber</VariableNames>
+            <VariableValues>1</VariableValues>
+            <Behaviors>
+                <!-- increase frame number every frame -->
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>ChangeVariable FrameNumber + 1</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- frame 1 -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>FrameNumber</VariableName>
+                        <Comparison>Equals</Comparison>
+                        <RequiredValue>1</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage downwell/dw_monster_explosion_1.png</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- frame 2 -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>FrameNumber</VariableName>
+                        <Comparison>Equals</Comparison>
+                        <RequiredValue>3</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable FrameNumber + 1</Effect>
+                        <Effect>SetImage downwell/dw_monster_explosion_2.png</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- frame 3 -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>FrameNumber</VariableName>
+                        <Comparison>Equals</Comparison>
+                        <RequiredValue>5</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage downwell/dw_monster_explosion_3.png</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- frame 4 -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>FrameNumber</VariableName>
+                        <Comparison>Equals</Comparison>
+                        <RequiredValue>7</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage downwell/dw_monster_explosion_4.png</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- frame 5 -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>FrameNumber</VariableName>
+                        <Comparison>Equals</Comparison>
+                        <RequiredValue>9</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage downwell/dw_monster_explosion_5.png</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- after frame 5, remove self -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>FrameNumber</VariableName>
+                        <Comparison>Equals</Comparison>
+                        <RequiredValue>11</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>RemoveSelf</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Background -->
+        <ImageEntity>
+            <Name>Background</Name>
+            <Width>1000</Width>
+            <Height>800</Height>
+            <Image>downwellBackground.png</Image>
+            <Stationary>true</Stationary>
+        </ImageEntity>
+        <!-- Platform Tile -->
+        <ImageEntity>
+            <Name>PlatformTile</Name>
+            <Width>57</Width>
+            <Height>42</Height>
+            <Image>dw_platform_tile_side_up.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <!-- Cave Wall Left Tiles -->
+        <ImageEntity>
+            <Name>CaveTileLeft</Name>
+            <Width>60</Width>
+            <Height>60</Height>
+            <Image>dw_cave_wall_left.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+        <!-- Cave Wall Right Tiles -->
+        <ImageEntity>
+            <Name>CaveTileRight</Name>
+            <Width>60</Width>
+            <Height>60</Height>
+            <Image>dw_cave_wall_right.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>
+        </ImageEntity>
+    </Entities>
+    <Variables>
+        <!-- Score behavior  -->
+        <Variable>
+            <Name>Score</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <!-- Lives behavior  -->
+        <Variable>
+            <Name>Lives</Name>
+            <StartValue>1</StartValue>
+        </Variable>
+        <!-- Welltaro x position  -->
+        <Variable>
+            <Name>WelltaroXPos</Name>
+            <StartValue>500</StartValue>
+        </Variable>
+        <!-- Welltaro y position  -->
+        <Variable>
+            <Name>WelltaroYPos</Name>
+            <StartValue>100</StartValue>
+        </Variable>
+        <!-- Camera Difference Variable    -->
+        <Variable>
+            <Name>CameraDiff</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <!-- Camera Top Border Variable    -->
+        <Variable>
+            <Name>CameraBorderYTop</Name>
+            <StartValue>100</StartValue>
+        </Variable>
+        <!-- Camera Top Border Variable    -->
+        <Variable>
+            <Name>CameraBorderYBottom</Name>
+            <StartValue>300</StartValue>
+        </Variable>
+    </Variables>
+    <Levels>
+        <Level>
+            <ID>1</ID>
+            <NextLevel>1</NextLevel>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Score: %.0f</Text>
+                    <Font>Times New Roman</Font>
+                    <XPos>500</XPos>
+                    <YPos>-50</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <Stationary>true</Stationary>
+                    <PropertyVariableDependency>
+                        <VariableName>Score</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+            <ImageEntityInstances>
+                <!--Background-->
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <!--Trail pieces-->
+                <ImageEntityInstance>
+                    <Name>RedTrail</Name>
+                    <XPos>100</XPos>
+                    <YPos>200</YPos>
+                    <VariableNames>FramePosition</VariableNames>
+                    <VariableValues>0</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedTrail</Name>
+                    <XPos>100</XPos>
+                    <YPos>200</YPos>
+                    <VariableNames>FramePosition</VariableNames>
+                    <VariableValues>2</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedTrail</Name>
+                    <XPos>100</XPos>
+                    <YPos>200</YPos>
+                    <VariableNames>FramePosition</VariableNames>
+                    <VariableValues>4</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedTrail</Name>
+                    <XPos>100</XPos>
+                    <YPos>200</YPos>
+                    <VariableNames>FramePosition</VariableNames>
+                    <VariableValues>6</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>RedTrail</Name>
+                    <XPos>100</XPos>
+                    <YPos>200</YPos>
+                    <VariableNames>FramePosition</VariableNames>
+                    <VariableValues>8</VariableValues>
+                </ImageEntityInstance>
+                <!--welltaro-->
+                <ImageEntityInstance>
+                    <Name>Welltaro</Name>
+                    <XPos>220</XPos>
+                    <YPos>100</YPos>
+                </ImageEntityInstance>
+                <!--jelly monster-->
+                <ImageEntityInstance>
+                    <Name>JellyMonster</Name>
+                    <XPos>700</XPos>
+                    <YPos>300</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>JellyMonster</Name>
+                    <XPos>300</XPos>
+                    <YPos>400</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>JellyMonster</Name>
+                    <XPos>333</XPos>
+                    <YPos>1000</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>JellyMonster</Name>
+                    <XPos>600</XPos>
+                    <YPos>1000</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>JellyMonster</Name>
+                    <XPos>333</XPos>
+                    <YPos>1700</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>JellyMonster</Name>
+                    <XPos>600</XPos>
+                    <YPos>1700</YPos>
+                </ImageEntityInstance>
+                <!--blocks-->
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>160</XPos>
+                    <YPos>200</YPos>
+                    <Columns>7</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>620</XPos>
+                    <YPos>500</YPos>
+                    <Rows>3</Rows>
+                    <YGap>0</YGap>
+                    <Columns>3</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>200</XPos>
+                    <YPos>650</YPos>
+                    <Rows>2</Rows>
+                    <YGap>0</YGap>
+                    <Columns>3</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>433</XPos>
+                    <YPos>900</YPos>
+                    <Rows>1</Rows>
+                    <YGap>0</YGap>
+                    <Columns>3</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>200</XPos>
+                    <YPos>1100</YPos>
+                    <Rows>3</Rows>
+                    <YGap>0</YGap>
+                    <Columns>2</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>300</XPos>
+                    <YPos>1142</YPos>
+                    <Rows>2</Rows>
+                    <YGap>0</YGap>
+                    <Columns>2</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>675</XPos>
+                    <YPos>1100</YPos>
+                    <Rows>3</Rows>
+                    <YGap>0</YGap>
+                    <Columns>2</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>625</XPos>
+                    <YPos>1142</YPos>
+                    <Rows>2</Rows>
+                    <YGap>0</YGap>
+                    <Columns>1</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>300</XPos>
+                    <YPos>1350</YPos>
+                    <Rows>1</Rows>
+                    <YGap>0</YGap>
+                    <Columns>4</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>200</XPos>
+                    <YPos>1800</YPos>
+                    <Rows>3</Rows>
+                    <YGap>0</YGap>
+                    <Columns>2</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>680</XPos>
+                    <YPos>1800</YPos>
+                    <Rows>3</Rows>
+                    <YGap>0</YGap>
+                    <Columns>2</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>200</XPos>
+                    <YPos>1926</YPos>
+                    <Rows>6</Rows>
+                    <YGap>0</YGap>
+                    <Columns>3</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>PlatformTile</Name>
+                    <XPos>625</XPos>
+                    <YPos>1926</YPos>
+                    <Rows>6</Rows>
+                    <YGap>0</YGap>
+                    <Columns>3</Columns>
+                    <XGap>0</XGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>FinishLine</Name>
+                    <XPos>275</XPos>
+                    <YPos>2178</YPos>
+                </ImageEntityInstance>
+                <!--cave walls-->
+                <ImageEntityInstance>
+                    <Name>CaveTileLeft</Name>
+                    <XPos>150</XPos>
+                    <YPos>0</YPos>
+                    <Rows>42</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>CaveTileRight</Name>
+                    <XPos>790</XPos>
+                    <YPos>0</YPos>
+                    <Rows>42</Rows>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+        </Level>
+    </Levels>
+</Game>

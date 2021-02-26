@@ -1,0 +1,14 @@
+<User>
+    <Name>Braeden</Name>
+    <Image>DefaultAvatar.png</Image>
+    <SavedGameStates>
+        <Game>
+            <Name>Super Mario Bros</Name>
+            <Save>
+                <Date>4/24/20</Date>
+                <StateFilePath>data/users/Braeden/saves/mario-save.xml</StateFilePath>
+            </Save>
+            <HighScore>60</HighScore>
+        </Game>
+    </SavedGameStates>
+</User>

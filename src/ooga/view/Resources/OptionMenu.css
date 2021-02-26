@@ -1,0 +1,48 @@
+.root{
+    -fx-background-image: url("menubackground.jpg");
+}
+.button{
+    -fx-pref-height: 150;
+    -fx-pref-width: 800;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0,1,2,3;
+    -fx-background-radius: 3,2,2,2;
+    -fx-padding: 12 30 12 30;
+    -fx-text-fill: white;
+    -fx-font-size: 50px;
+    -fx-background-size: 100px;
+    -fx-graphic-text-gap: 50px;
+    -fx-text-alignment: right;
+}
+.scroll-pane > .viewport  {
+    -fx-background-color: transparent;
+    -fx-alignment: center;
+}
+.scroll-pane{
+    -fx-background-color: transparent;
+}
+.text-field{
+    -fx-text-fill: white;
+    -fx-font-size: 70px;
+}
+.icon{
+    -fx-pref-columns: 1;
+    -fx-fit-to-height: 50;
+    -fx-fit-to-width: 50;
+    -fx-alignment: right;
+}
+.title{
+    -fx-text-fill: white;
+    -fx-font-size: 70px;
+}
+.button:hover{
+    -fx-background-color: transparent;
+    -fx-border-color: white;
+    -fx-text-fill: white;
+    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0.0 , 0 , 1);
+}
+.button .text-field {
+    -fx-pref-columns: 2;
+    -fx-effect: dropshadow( one-pass-box , rgba(0,0,0,0.8) , 0, 0.0 , 0 , 1);
+}
+

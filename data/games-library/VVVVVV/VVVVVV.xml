@@ -1,0 +1,330 @@
+<Game>
+    <Name>VVVVVV</Name>
+    <Thumbnail>VVVVVV-thumbnail.jpg</Thumbnail>
+    <Description>A 2010 puzzle-platform video game created by Terry Cavanagh.</Description>
+    <Entities>
+        <!-- Avatar Definition-->
+        <ImageEntity>
+            <Name>Avatar</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image>spriteUp.png</Image>
+            <VariableNames>Up Down GravityDown</VariableNames>
+            <VariableValues>VVVVVV/spriteUp.png VVVVVV/spriteDown.png -1</VariableValues>
+            <Behaviors>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>GravityDown</VariableName>
+                        <RequiredValue>-1</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>Gravity 0 1 + 0.1</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>GravityDown</VariableName>
+                        <RequiredValue>1</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>Gravity 0 -1 + 0.1</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Avatar</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Right</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Right</Args>
+                        <Effect>TerrainCollisionRight</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Avatar</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Left</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Left</Args>
+                        <Effect>TerrainCollisionLeft</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Avatar</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Avatar</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <CollisionDeterminedAction>
+                        <Args>universalTerrain Up</Args>
+                        <Effect>TerrainCollisionUp</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput .100 0 + .3200</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>true</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput -.100 0 + .3200</Effect>
+                    </IndependentAction>
+                </Behavior>
+                  <Behavior>
+                        <RequiredCollisionCondition>
+                            <Entity1>Avatar</Entity1>
+                            <Entity2>universalTerrain</Entity2>
+                            <Direction>ANY</Direction>
+                        </RequiredCollisionCondition>
+                        <InputCondition>
+                          <Key>UpKey</Key>
+                          <InputRequirement>Pressed</InputRequirement>
+                        </InputCondition>
+                        <IndependentAction>
+                          <Effect>SetVariable GravityDown 1</Effect>
+                              <Effect>SetImage Down</Effect>
+                        </IndependentAction>
+                  </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Avatar</Entity1>
+                        <Entity2>universalTerrain</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <InputCondition>
+                        <Key>DownKey</Key>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable GravityDown -1</Effect>
+                        <Effect>SetImage Up</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>Avatar</Entity1>
+                        <Entity2>enemy</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Respawn RespawnYLocation RespawnXLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!--  Floor Definition-->
+        <ImageEntity>
+            <Name>Floor</Name>
+            <Width>100</Width>
+            <Height>50</Height>
+            <Image>tile.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>universalTerrain</VariableValues>c
+        </ImageEntity>
+        <!-- Spikes Definition-->
+        <ImageEntity>
+            <Name>Spikes</Name>
+            <Width>12</Width>
+            <Height>12</Height>
+            <Image>spike.png</Image>
+            <VariableNames>TerrainID</VariableNames>
+            <VariableValues>enemy</VariableValues>
+        </ImageEntity>
+        <!-- Background Definition-->
+        <ImageEntity>
+            <Name>Background</Name>
+            <Width>1000</Width>
+            <Height>800</Height>
+            <Image>background.jpg</Image>
+        </ImageEntity>
+        <!-- CheckPoint Definition-->
+        <ImageEntity>
+            <Name>CheckPoint</Name>
+            <Width>50</Width>
+            <Height>100</Height>
+            <Image>checkpoint.png</Image>
+            <Behaviors>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Avatar</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable RespawnXLocation XLocation</Effect>
+                        <Effect>SetVariable RespawnYLocation YLocation</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Blob Definition-->
+        <ImageEntity>
+            <Name>Blob</Name>
+            <Width>100</Width>
+            <Height>100</Height>
+            <Image>blob.png</Image>
+            <VariableNames>TerrainID yVel</VariableNames>
+            <VariableValues>enemy 0.1300</VariableValues>
+            <!--  Move Up and Down-->
+            <Behavior>
+                <IndependentAction>
+                    <Effect>VelocityInput 0.0 yVel + 0.2600</Effect>
+                </IndependentAction>
+            </Behavior>
+            <!--    Run into floor down turn around-->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>Up</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>universalTerrain Up</Args>
+                    <Effect>TerrainCollisionUp</Effect>
+                    <Effect>SetVariable yVel 0.1300</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+            <!--    Run into floor up turn around-->
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity2>universalTerrain</Entity2>
+                    <Direction>Down</Direction>
+                </RequiredCollisionCondition>
+                <CollisionDeterminedAction>
+                    <Args>universalTerrain Down</Args>
+                    <Effect>TerrainCollisionDown</Effect>
+                    <Effect>SetVariable yVel -0.1300</Effect>
+                </CollisionDeterminedAction>
+            </Behavior>
+        </ImageEntity>
+    </Entities>
+    <Variables>
+        <Variable>
+            <Name>RespawnXLocation</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <Variable>
+            <Name>RespawnXLocation</Name>
+            <StartValue>500</StartValue>
+        </Variable>
+    </Variables>
+    <Levels>
+        <Level>
+            <ID>1</ID>
+            <NextLevel>1</NextLevel>
+            <ImageEntityInstances>
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>CheckPoint</Name>
+                    <XPos>100</XPos>
+                    <YPos>500</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>600</YPos>
+                    <Columns>15</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>650</YPos>
+                    <Columns>15</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>700</YPos>
+                    <Columns>15</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>750</YPos>
+                    <Columns>15</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>800</YPos>
+                    <Columns>15</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                    <Columns>15</Columns>
+                    <Rows>4</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>200</XPos>
+                    <YPos>300</YPos>
+                    <Columns>1</Columns>
+                    <Rows>10</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Floor</Name>
+                    <XPos>400</XPos>
+                    <YPos>0</YPos>
+                    <Columns>1</Columns>
+                    <Rows>10</Rows>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Spikes</Name>
+                    <XPos>500</XPos>
+                    <YPos>588</YPos>
+                    <Columns>10</Columns>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Blob</Name>
+                    <XPos>700</XPos>
+                    <YPos>400</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Avatar</Name>
+                    <XPos>100</XPos>
+                    <YPos>500</YPos>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Score: 0</Text>
+                    <Font>Times New Roman</Font>
+                    <XPos>650</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <PropertyVariableDependency>
+                        <VariableName>RespawnXLocation</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+        </Level>
+    </Levels>
+</Game>

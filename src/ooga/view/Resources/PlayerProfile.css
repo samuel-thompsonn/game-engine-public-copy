@@ -1,0 +1,7 @@
+.root{
+    -fx-background-image: url("menubackground.jpg");
+}
+
+.grid-pane{
+    -fx-text-fill: green;
+}

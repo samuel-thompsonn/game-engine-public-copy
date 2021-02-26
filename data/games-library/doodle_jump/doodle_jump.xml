@@ -1,0 +1,583 @@
+<Game>
+    <Name>Doodle Jump</Name>
+    <Thumbnail>doodle_jump_logo.png</Thumbnail>
+    <Description>Jump as High as you can</Description>
+    <Entities>
+        <!-- Doodle behavior  -->
+        <ImageEntity>
+            <Name>Doodle</Name>
+            <Width>70</Width>
+            <Height>70</Height>
+            <Image>doodle_right.png</Image>
+            <VariableNames>FacingRight FacingLeft</VariableNames>
+            <VariableValues>doodle_jump/doodle_right.png doodle_jump/doodle_left.png</VariableValues>
+            <Behaviors>
+                <!-- Falling Under the bottom of screen -->
+                <Behavior>
+                    <EntityVariableCondition>
+                        <VariableName>YPos</VariableName>
+                        <Comparison>GreaterThan</Comparison>
+                        <RequiredValue>FloorValue</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--   Resetting the Game and all the variables  -->
+                <Behavior>
+                    <GameVariableCondition>
+                        <VariableName>Lives</VariableName>
+                        <RequiredValue>0.0</RequiredValue>
+                    </GameVariableCondition>
+                    <IndependentAction>
+                        <Effect>GoToLevel 1</Effect>
+                        <Effect>SetVariable Lives 1.0</Effect>
+                        <Effect>SetVariable Score 0.0</Effect>
+                        <Effect>SetVariable CameraShiftValue 0.0</Effect>
+                        <Effect>SetVariable CameraBorderYPos 200</Effect>
+                        <Effect>SetVariable FloorValue 800</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Collision with Blue Platform  -->
+                <Behavior>
+                    <RequiredCollisionDetection>
+                        <Entity1>Doodle</Entity1>
+                        <Entity2>BluePlatform</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionDetection>
+                    <CollisionDeterminedAction>
+                        <Args>BluePlatform Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                        <Effect>SetVelocity 0.0 0.0</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>BluePlatform</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0.0 -1.00 + 10.0</Effect>
+                        <Effect>ChangeVariable Score + 100.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Collision with Green Platform  -->
+                <Behavior>
+                    <RequiredCollisionDetection>
+                        <Entity1>Doodle</Entity1>
+                        <Entity2>GreenPlatform</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionDetection>
+                    <CollisionDeterminedAction>
+                        <Args>GreenPlatform Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                        <Effect>SetVelocity 0.0 0.0</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>GreenPlatform</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Score + 100.0</Effect>
+                        <Effect>Jump 0.0 -1.00 + 10.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Collision with White Platform  -->
+                <Behavior>
+                    <RequiredCollisionDetection>
+                        <Entity1>Doodle</Entity1>
+                        <Entity2>WhitePlatform</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionDetection>
+                    <CollisionDeterminedAction>
+                        <Args>WhitePlatform Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                        <Effect>SetVelocity 0.0 0.0</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>WhitePlatform</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0.0 -1.00 + 20.0</Effect>
+                        <Effect>ChangeVariable Score + 100.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Collision with Monster  -->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Monster</Entity2>
+                        <Direction>Left</Direction>
+                        <Direction>Right</Direction>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionDetection>
+                        <Entity1>Doodle</Entity1>
+                        <Entity2>Monster</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionDetection>
+                    <CollisionDeterminedAction>
+                        <Args>Monster Down</Args>
+                        <Effect>TerrainCollisionDown</Effect>
+                    </CollisionDeterminedAction>
+                </Behavior>
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Monster</Entity2>
+                        <Direction>Down</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>Jump 0.0 -1.00 + 20.0</Effect>
+                        <Effect>ChangeVariable Score + 100.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Collision with Void  -->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity2>Void</Entity2>
+                        <Direction>ANY</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>SetVariable Blinking true</Effect>
+                        <Effect>ChangeVariable Lives + -1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Left Key Input -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>LeftKey</Key>
+                        <InputRequirement>Active</InputRequirement>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput -.1600 0 + .3200</Effect>
+                        <Effect>SetImage FacingLeft</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!-- Right Key Input -->
+                <Behavior>
+                    <InputCondition>
+                        <Key>RightKey</Key>
+                        <InputRequirement>Active</InputRequirement>
+                        <InputRequirement>Pressed</InputRequirement>
+                    </InputCondition>
+                    <IndependentAction>
+                        <Effect>VelocityInput .1600 0 + .3200</Effect>
+                        <Effect>SetImage FacingRight</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--Gravity Behavior-->
+                <Behavior>
+                    <IndependentAction>
+                        <Effect>Gravity 0 0.05 + 20</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Green Platform Behavior  -->
+        <ImageEntity>
+            <Name>GreenPlatform</Name>
+            <Width>75</Width>
+            <Height>20</Height>
+            <Image>greenplatform.png</Image>
+        </ImageEntity>
+        <!-- Blue Platform Behavior  -->
+        <ImageEntity>
+            <Name>BluePlatform</Name>
+            <Width>75</Width>
+            <Height>20</Height>
+            <Image>blueplatform.png</Image>
+        </ImageEntity>
+        <!-- Monster Behavior  -->
+        <ImageEntity>
+            <Name>Monster</Name>
+            <Width>75</Width>
+            <Height>50</Height>
+            <Image>monster.png</Image>
+            <Behaviors>
+                <!-- Dies if Doodle Jumps on top -->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Doodle</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <IndependentAction>
+                        <Effect>RemoveSelf</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Void Behavior  -->
+        <ImageEntity>
+            <Name>Void</Name>
+            <Width>75</Width>
+            <Height>50</Height>
+            <Image>void.png</Image>
+        </ImageEntity>
+        <!-- White Platform Behavior  -->
+        <ImageEntity>
+            <Name>WhitePlatform</Name>
+            <Width>75</Width>
+            <Height>20</Height>
+            <Image>whiteplatform.png</Image>
+            <VariableNames>TouchedOnce TouchedTwice count</VariableNames>
+            <VariableValues>doodle_jump/yellowplatform.png doodle_jump/redplatform.png 0</VariableValues>
+            <Behaviors>
+                <!-- Touched Twice by Doodle -->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Doodle</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <EntityVariableCondition>
+                        <EntityNameOrID>WhitePlatform</EntityNameOrID>
+                        <VariableName>count</VariableName>
+                        <RequiredValue>0</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage TouchedTwice</Effect>
+                        <Effect>ChangeVariable count + 1.0</Effect>
+                        <Effect>ChangeVariable score + 1.0</Effect>
+                    </IndependentAction>
+                </Behavior>
+                <!--  Touched Once  by Doodle -->
+                <Behavior>
+                    <RequiredCollisionCondition>
+                        <Entity1>SELF</Entity1>
+                        <Entity2>Doodle</Entity2>
+                        <Direction>Up</Direction>
+                    </RequiredCollisionCondition>
+                    <EntityVariableCondition>
+                        <EntityNameOrID>WhitePlatform</EntityNameOrID>
+                        <VariableName>count</VariableName>
+                        <RequiredValue>1</RequiredValue>
+                    </EntityVariableCondition>
+                    <IndependentAction>
+                        <Effect>SetImage TouchedOnce</Effect>
+                    </IndependentAction>
+                </Behavior>
+            </Behaviors>
+        </ImageEntity>
+        <!-- Cracked Platform Behavior  -->
+        <ImageEntity>
+            <Name>CrackedPlatform</Name>
+            <Width>75</Width>
+            <Height>20</Height>
+            <Image>crackedplatform.png</Image>
+            <VariableNames>NotTouched Touched</VariableNames>
+            <VariableValues>doodle_jump/crackedplatform.png doodle_jump/brokenplatform.png</VariableValues>
+           <Behaviors>
+                <!--  If Doodle Jumps on top, it cracks -->
+               <Behavior>
+                   <RequiredCollisionCondition>
+                       <Entity1>SELF</Entity1>
+                       <Entity2>Doodle</Entity2>
+                       <Direction>Up</Direction>
+                   </RequiredCollisionCondition>
+                   <IndependentAction>
+                       <Effect>SetImage Touched</Effect>
+                   </IndependentAction>
+               </Behavior>
+           </Behaviors>
+        </ImageEntity>
+        <!-- Background Behavior  -->
+        <ImageEntity>
+            <Name>Background</Name>
+            <Width>1000</Width>
+            <Height>800</Height>
+            <Image>background.png</Image>
+            <Stationary>true</Stationary>
+        </ImageEntity>
+        <!-- Bottom of screen behavior  -->
+        <ImageEntity>
+            <Name>OffScreen</Name>
+            <Width>1500</Width>
+            <Height>1</Height>
+            <Image>mario_brick.png</Image>
+        </ImageEntity>
+        <!-- Invisible Screen Mover Behavior  -->
+        <ImageEntity>
+            <Name>IncreaseHeight</Name>
+            <Width>2000</Width>
+            <Height>200</Height>
+            <Image>transparent.png</Image>
+            <Stationary>true</Stationary>
+            <Behavior>
+                <RequiredCollisionCondition>
+                    <Entity1>Doodle</Entity1>
+                    <Entity2>IncreaseHeight</Entity2>
+                    <Direction>Up</Direction>
+                </RequiredCollisionCondition>
+                <IndependentAction>
+                    <Effect>SetVariable CameraShiftValue 50</Effect>
+                    <Effect>ShiftCamera 0 CameraShiftValue </Effect>
+                    <Effect>ChangePosition 0 50 - </Effect>
+                    <Effect>ChangeVariable FloorValue + -50</Effect>
+                </IndependentAction>
+            </Behavior>
+        </ImageEntity>
+    </Entities>
+    <Variables>
+        <!-- Score behavior  -->
+        <Variable>
+            <Name>Score</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <!-- Lives behavior  -->
+        <Variable>
+            <Name>Lives</Name>
+            <StartValue>1</StartValue>
+        </Variable>
+        <!-- Camera Shift Value behavior  -->
+        <Variable>
+            <Name>CameraShiftValue</Name>
+            <StartValue>0</StartValue>
+        </Variable>
+        <!-- Camera Y border behavior  -->
+        <Variable>
+            <Name>CameraBorderYPos</Name>
+            <StartValue>200</StartValue>
+        </Variable>
+        <!-- Floor Value behavior  -->
+        <Variable>
+            <Name>FloorValue</Name>
+            <StartValue>800</StartValue>
+        </Variable>
+    </Variables>
+    <Levels>
+        <Level>
+            <ID>1</ID>
+            <NextLevel>1</NextLevel>
+            <TextEntityInstances>
+                <TextEntityInstance>
+                    <Text>Score: %.0f</Text>
+                    <Font>Times New Roman</Font>
+                    <XPos>700</XPos>
+                    <YPos>0</YPos>
+                    <Width>150</Width>
+                    <Height>50</Height>
+                    <Stationary>true</Stationary>
+                    <PropertyVariableDependency>
+                        <VariableName>Score</VariableName>
+                        <PropertyName>Text</PropertyName>
+                    </PropertyVariableDependency>
+                </TextEntityInstance>
+            </TextEntityInstances>
+            <ImageEntityInstances>
+                <ImageEntityInstance>
+                    <Name>IncreaseHeight</Name>
+                    <XPos>-500</XPos>
+                    <YPos>100</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Background</Name>
+                    <XPos>0</XPos>
+                    <YPos>0</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Doodle</Name>
+                    <XPos>0</XPos>
+                    <YPos>500</YPos>
+                    <VariableNames>RespawnXLocation RespawnYLocation</VariableNames>
+                    <VariableValues>0 0</VariableValues>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>GreenPlatform</Name>
+                    <XPos>0</XPos>
+                    <YPos>700</YPos>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>GreenPlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>700</YPos>
+                    <Columns>2</Columns>
+                    <XGap>500</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BluePlatform</Name>
+                    <XPos>200</XPos>
+                    <YPos>600</YPos>
+                    <Columns>2</Columns>
+                    <XGap>300</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BluePlatform</Name>
+                    <XPos>300</XPos>
+                    <YPos>500</YPos>
+                    <Columns>2</Columns>
+                    <XGap>100</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BluePlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>400</YPos>
+                    <Columns>3</Columns>
+                    <XGap>300</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>CrackedPlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>300</YPos>
+                    <Columns>3</Columns>
+                    <XGap>300</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WhitePlatform</Name>
+                    <XPos>250</XPos>
+                    <YPos>300</YPos>
+                    <Columns>3</Columns>
+                    <XGap>300</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WhitePlatform</Name>
+                    <XPos>150</XPos>
+                    <YPos>200</YPos>
+                    <Columns>4</Columns>
+                    <XGap>250</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>GreenPlatform</Name>
+                    <XPos>0</XPos>
+                    <YPos>100</YPos>
+                    <Columns>5</Columns>
+                    <XGap>200</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BluePlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>0</YPos>
+                    <Columns>4</Columns>
+                    <XGap>100</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WhitePlatform</Name>
+                    <XPos>300</XPos>
+                    <YPos>-100</YPos>
+                    <Columns>3</Columns>
+                    <XGap>100</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Monster</Name>
+                    <XPos>200</XPos>
+                    <YPos>-200</YPos>
+                    <Columns>2</Columns>
+                    <XGap>500</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>CrackedPlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>-200</YPos>
+                    <Columns>3</Columns>
+                    <XGap>500</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>GreenPlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>-300</YPos>
+                    <Columns>3</Columns>
+                    <XGap>300</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>BluePlatform</Name>
+                    <XPos>300</XPos>
+                    <YPos>-400</YPos>
+                    <Columns>2</Columns>
+                    <XGap>300</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WhitePlatform</Name>
+                    <XPos>200</XPos>
+                    <YPos>-500</YPos>
+                    <Columns>3</Columns>
+                    <XGap>350</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Monster</Name>
+                    <XPos>300</XPos>
+                    <YPos>-600</YPos>
+                    <Columns>3</Columns>
+                    <XGap>350</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>WhitePlatform</Name>
+                    <XPos>100</XPos>
+                    <YPos>-700</YPos>
+                    <Columns>4</Columns>
+                    <XGap>250</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Void</Name>
+                    <XPos>250</XPos>
+                    <YPos>-350</YPos>
+                    <Columns>1</Columns>
+                    <XGap>400</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>Void</Name>
+                    <XPos>250</XPos>
+                    <YPos>200</YPos>
+                    <Columns>1</Columns>
+                    <XGap>400</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+                <ImageEntityInstance>
+                    <Name>GreenPlatform</Name>
+                    <XPos>400</XPos>
+                    <YPos>-800</YPos>
+                    <Columns>3</Columns>
+                    <XGap>150</XGap>
+                    <Rows>3</Rows>
+                    <YGap>-1600</YGap>
+                </ImageEntityInstance>
+            </ImageEntityInstances>
+        </Level>
+    </Levels>
+</Game>
